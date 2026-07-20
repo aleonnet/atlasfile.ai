@@ -61,7 +61,7 @@
           <div class="step-n mono">0</div>
           <div>
             <h2 data-i18n="install.req.title">Before you start</h2>
-            <p data-i18n="install.req.body">You need Docker Desktop (or Docker Engine + Compose) running, git, and ~4 GB free for images. macOS, Linux and Windows (WSL2) are supported.</p>
+            <p class="platform-text" data-i18n-html="install.req.body.mac">You need <a href="https://docs.docker.com/desktop/setup/install/mac-install/" rel="noopener">Docker Desktop</a> (macOS) or <a href="https://docs.docker.com/engine/install/" rel="noopener">Docker Engine + Compose</a> (Linux) running, <a href="https://git-scm.com/downloads" rel="noopener">git</a>, and ~4 GB free for images.</p>
           </div>
         </article>
 
@@ -69,7 +69,7 @@
           <div class="step-n mono">1</div>
           <div>
             <h2 data-i18n="install.step1.title">Run the installer</h2>
-            <p data-i18n="install.step1.body">Pick your platform. The script asks where your project files should live (default: ~/Documents/AtlasFileProjects) and takes it from there.</p>
+            <p class="platform-text" data-i18n-html="install.step1.body.mac">The script asks where your project files should live (default: <code>~/Documents/AtlasFileProjects</code>) and takes it from there.</p>
 
             <div class="tabs" role="tablist" aria-label="Platform">
               <button class="tab" role="tab" id="tab-mac" aria-selected="true" aria-controls="panel-mac" data-i18n="install.tab.mac">macOS / Linux</button>

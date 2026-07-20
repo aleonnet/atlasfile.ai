@@ -16,8 +16,14 @@ initBlackhole(document.getElementById("orb-sig"), { variant: "orb", starGain: 0.
 
 initTerminal(document.getElementById("install-term"));
 
-// tabs ARIA (setas + clique)
+// tabs ARIA (setas + clique); textos sensíveis à plataforma acompanham a tab
 const tabs = [...document.querySelectorAll('[role="tab"]')];
+function applyPlatform(platform) {
+  document.querySelectorAll(".platform-text").forEach((el) => {
+    el.dataset.i18nHtml = el.dataset.i18nHtml.replace(/\.(mac|win)$/, `.${platform}`);
+    el.innerHTML = t(el.dataset.i18nHtml);
+  });
+}
 function select(tab) {
   tabs.forEach((other) => {
     const on = other === tab;
@@ -25,6 +31,7 @@ function select(tab) {
     other.tabIndex = on ? 0 : -1;
     document.getElementById(other.getAttribute("aria-controls")).hidden = !on;
   });
+  applyPlatform(tab.id === "tab-win" ? "win" : "mac");
   tab.focus();
 }
 tabs.forEach((tab) => {

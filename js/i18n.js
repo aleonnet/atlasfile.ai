@@ -53,9 +53,11 @@ const STRINGS = {
     "install.title": "Cross the event horizon.",
     "install.lead": "One command clones the repo, configures the environment, builds five Docker services and opens the interface. Idempotent: run it again anytime to update.",
     "install.req.title": "Before you start",
-    "install.req.body": "You need Docker Desktop (or Docker Engine + Compose) running, git, and ~4 GB free for images. macOS, Linux and Windows (WSL2) are supported.",
+    "install.req.body.mac": "You need <a href=\"https://docs.docker.com/desktop/setup/install/mac-install/\" rel=\"noopener\">Docker Desktop</a> (macOS) or <a href=\"https://docs.docker.com/engine/install/\" rel=\"noopener\">Docker Engine + Compose</a> (Linux) running, <a href=\"https://git-scm.com/downloads\" rel=\"noopener\">git</a>, and ~4 GB free for images.",
+    "install.req.body.win": "You need <a href=\"https://docs.docker.com/desktop/setup/install/windows-install/\" rel=\"noopener\">Docker Desktop</a> running with the <a href=\"https://learn.microsoft.com/windows/wsl/install\" rel=\"noopener\">WSL2 backend</a>, and ~4 GB free for images. The installer runs in PowerShell.",
     "install.step1.title": "Run the installer",
-    "install.step1.body": "Pick your platform. The script asks where your project files should live (default: ~/Documents/AtlasFileProjects) and takes it from there.",
+    "install.step1.body.mac": "The script asks where your project files should live (default: <code>~/Documents/AtlasFileProjects</code>) and takes it from there.",
+    "install.step1.body.win": "The script asks where your project files should live (default: <code>Documents\\AtlasFileProjects</code> in your user profile) and takes it from there.",
     "install.tab.mac": "macOS / Linux",
     "install.tab.win": "Windows (PowerShell)",
     "install.step2.title": "Watch it boot",
@@ -125,9 +127,11 @@ const STRINGS = {
     "install.title": "Cruze o horizonte de eventos.",
     "install.lead": "Um comando clona o repo, configura o ambiente, builda cinco serviços Docker e abre a interface. Idempotente: rode de novo quando quiser atualizar.",
     "install.req.title": "Antes de começar",
-    "install.req.body": "Você precisa do Docker Desktop (ou Docker Engine + Compose) rodando, git, e ~4 GB livres para as imagens. macOS, Linux e Windows (WSL2) são suportados.",
+    "install.req.body.mac": "Você precisa do <a href=\"https://docs.docker.com/desktop/setup/install/mac-install/\" rel=\"noopener\">Docker Desktop</a> (macOS) ou <a href=\"https://docs.docker.com/engine/install/\" rel=\"noopener\">Docker Engine + Compose</a> (Linux) rodando, <a href=\"https://git-scm.com/downloads\" rel=\"noopener\">git</a>, e ~4 GB livres para as imagens.",
+    "install.req.body.win": "Você precisa do <a href=\"https://docs.docker.com/desktop/setup/install/windows-install/\" rel=\"noopener\">Docker Desktop</a> rodando com o <a href=\"https://learn.microsoft.com/pt-br/windows/wsl/install\" rel=\"noopener\">backend WSL2</a>, e ~4 GB livres para as imagens. O instalador roda no PowerShell.",
     "install.step1.title": "Rode o instalador",
-    "install.step1.body": "Escolha sua plataforma. O script pergunta onde seus arquivos de projeto devem morar (padrão: ~/Documents/AtlasFileProjects) e cuida do resto.",
+    "install.step1.body.mac": "O script pergunta onde seus arquivos de projeto devem morar (padrão: <code>~/Documents/AtlasFileProjects</code>) e cuida do resto.",
+    "install.step1.body.win": "O script pergunta onde seus arquivos de projeto devem morar (padrão: <code>Documentos\\AtlasFileProjects</code> no seu perfil de usuário) e cuida do resto.",
     "install.tab.mac": "macOS / Linux",
     "install.tab.win": "Windows (PowerShell)",
     "install.step2.title": "Veja a stack subir",
@@ -161,6 +165,10 @@ export function applyLang(next) {
 
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     el.textContent = t(el.dataset.i18n);
+  });
+  // Strings 100% nossas com markup embutido (links/código) — nunca input externo
+  document.querySelectorAll("[data-i18n-html]").forEach((el) => {
+    el.innerHTML = t(el.dataset.i18nHtml);
   });
   document.querySelectorAll("[data-i18n-attr]").forEach((el) => {
     el.dataset.i18nAttr.split(";").forEach((pair) => {
