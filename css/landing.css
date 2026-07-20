@@ -121,6 +121,32 @@
 .reveal:nth-child(3) { transition-delay: 120ms; }
 .reveal:nth-child(4) { transition-delay: 180ms; }
 
+/* ---- ATO 3.5: how it works (clips reais) ---- */
+.hiw-step {
+  display: grid; grid-template-columns: 1fr; gap: 1.4rem;
+  align-items: center; margin-top: 3.2rem;
+}
+@media (min-width: 820px) {
+  .hiw-step { grid-template-columns: 5fr 7fr; gap: 2.6rem; }
+  /* alterna o lado do vídeo sem duplicar markup — colunas também invertem
+     para o vídeo manter a coluna larga */
+  .hiw-step--flip { grid-template-columns: 7fr 5fr; }
+  .hiw-step--flip .hiw-copy { order: 2; }
+  .hiw-step--flip .hiw-shot { order: 1; }
+}
+.hiw-kicker { color: var(--accent); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.5rem; }
+.hiw-copy h3 { margin: 0 0 0.6rem; }
+.hiw-copy p { color: var(--muted); font-size: 0.95rem; }
+.hiw-shot {
+  border: 1px solid var(--border); border-radius: var(--radius-xl);
+  background: var(--panel); box-shadow: var(--shadow-lg);
+  padding: 0.5rem; overflow: hidden;
+}
+.hiw-video {
+  display: block; width: 100%; height: auto;
+  border-radius: calc(var(--radius-xl) - 0.5rem);
+}
+
 /* ---- ATO 4: features ---- */
 .feature-grid {
   display: grid; grid-template-columns: 1fr;

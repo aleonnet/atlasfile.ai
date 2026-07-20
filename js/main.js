@@ -76,3 +76,18 @@ if (new URLSearchParams(location.search).get("og") === "1") {
 // terminal do CTA + copiar embutido
 initTerminal(document.getElementById("cta-term"));
 initCopyButtons(t);
+
+// clips do "how it works": tocam só quando visíveis (e nunca em reduced-motion,
+// onde o poster basta)
+const hiwReduced = matchMedia("(prefers-reduced-motion: reduce)").matches
+  || new URLSearchParams(location.search).get("motion") === "reduce";
+if (!hiwReduced) {
+  const vids = document.querySelectorAll(".hiw-video");
+  const vio = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) e.target.play().catch(() => {});
+      else e.target.pause();
+    }
+  }, { threshold: 0.25 });
+  vids.forEach((v) => vio.observe(v));
+}
