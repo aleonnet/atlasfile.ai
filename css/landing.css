@@ -2,7 +2,8 @@
    --space-bg independente do tema; do ato 3 em diante o tema governa. */
 
 /* ---- ATO 1+2: palco sticky ---- */
-.act-gravity { height: 320vh; position: relative; background: var(--space-bg); }
+/* 200vh: ~1 rolagem fluida atravessa o ato (320vh exigia 4 voltas de roda) */
+.act-gravity { height: 200vh; position: relative; background: var(--space-bg); }
 .act-gravity__stage {
   position: sticky; top: 0; height: 100vh; overflow: hidden;
   display: grid; place-items: center;

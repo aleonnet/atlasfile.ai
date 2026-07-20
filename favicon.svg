@@ -1,27 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Orb do AtlasFile com as duas luas — o logo do produto -->
   <defs>
-    <linearGradient id="disk" x1="0" y1="0" x2="1" y2="0.3">
-      <stop offset="0" stop-color="#ffb366"/>
-      <stop offset="0.5" stop-color="#ff5a36"/>
-      <stop offset="1" stop-color="#c97bff"/>
-    </linearGradient>
-    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0.55" stop-color="#c97bff" stop-opacity="0.35"/>
-      <stop offset="1" stop-color="#c97bff" stop-opacity="0"/>
+    <radialGradient id="orb" cx="0.38" cy="0.32" r="0.85">
+      <stop offset="0" stop-color="#ffd9a8"/>
+      <stop offset="0.35" stop-color="#ff8a6b"/>
+      <stop offset="0.75" stop-color="#ff5a36"/>
+      <stop offset="1" stop-color="#e0452a"/>
+    </radialGradient>
+    <radialGradient id="aurora" cx="0.62" cy="0.55" r="0.6">
+      <stop offset="0" stop-color="#ff7ac2" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff7ac2" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0.6" stop-color="#ff5a36" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#ff5a36" stop-opacity="0"/>
     </radialGradient>
   </defs>
   <rect width="64" height="64" rx="14" fill="#0e0d10"/>
-  <circle cx="32" cy="32" r="26" fill="url(#glow)"/>
-  <!-- disco de acreção (atrás, arco superior) -->
-  <ellipse cx="32" cy="30" rx="24" ry="8.5" fill="none" stroke="url(#disk)" stroke-width="4.5" stroke-linecap="round" transform="rotate(-14 32 32)" stroke-dasharray="76 76" stroke-dashoffset="-12"/>
-  <!-- sombra -->
-  <circle cx="32" cy="32" r="12.5" fill="#000"/>
-  <circle cx="32" cy="32" r="12.5" fill="none" stroke="#fff2df" stroke-width="1.1" opacity="0.85"/>
-  <!-- disco (frente, arco inferior) -->
-  <ellipse cx="32" cy="34" rx="24" ry="8.5" fill="none" stroke="url(#disk)" stroke-width="5" stroke-linecap="round" transform="rotate(-14 32 32)" stroke-dasharray="60 92" stroke-dashoffset="64"/>
-  <!-- estrelas -->
-  <circle cx="12" cy="14" r="1.1" fill="#ffe9c9"/>
-  <circle cx="52" cy="10" r="0.9" fill="#cfd8ff"/>
-  <circle cx="55" cy="50" r="1" fill="#ffe9c9"/>
-  <circle cx="9" cy="49" r="0.8" fill="#cfd8ff"/>
+  <circle cx="32" cy="33" r="26" fill="url(#halo)"/>
+  <circle cx="32" cy="33" r="16" fill="url(#orb)"/>
+  <circle cx="32" cy="33" r="16" fill="url(#aurora)"/>
+  <!-- brilho especular -->
+  <ellipse cx="26.5" cy="26.5" rx="5" ry="3.6" fill="#fff" opacity="0.5" transform="rotate(-24 26.5 26.5)"/>
+  <!-- lua 1: laranja, superior esquerda -->
+  <circle cx="15" cy="17" r="3.1" fill="#ff8a6b"/>
+  <!-- lua 2: púrpura, inferior direita -->
+  <circle cx="49.5" cy="47" r="2.5" fill="#c97bff"/>
 </svg>
