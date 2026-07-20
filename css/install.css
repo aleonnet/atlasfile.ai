@@ -1,0 +1,53 @@
+/* Página de instalação. Hero compacto com orb-assinatura; passos numerados. */
+
+.install-hero {
+  padding: clamp(7rem, 16vh, 9rem) clamp(1rem, 4vw, 2.5rem) 1rem;
+  text-align: center;
+  background: radial-gradient(ellipse at 50% -10%, var(--accent-soft), transparent 60%), var(--bg);
+}
+.install-hero .lead { margin: 0 auto; }
+.orb-sig { width: 120px; height: 120px; margin: 0 auto 0.6rem; display: block; }
+
+.install-flow { max-width: 780px; display: flex; flex-direction: column; gap: 2.6rem; }
+
+.step { display: grid; grid-template-columns: 48px 1fr; gap: 1.2rem; align-items: start; }
+.step-n {
+  width: 42px; height: 42px; display: grid; place-items: center;
+  border-radius: var(--radius-full); font-weight: 700; font-size: 1rem;
+  color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent);
+}
+.step h2 { font-size: 1.3rem; margin-bottom: 0.4rem; }
+.step p { color: var(--muted); }
+.step .term { margin-top: 1rem; }
+
+/* tabs */
+.tabs { display: flex; gap: 0.4rem; margin: 1rem 0 0.8rem; }
+.tab {
+  appearance: none; border: 1px solid var(--border); background: var(--panel);
+  color: var(--muted); font-family: var(--font-display); font-weight: 600; font-size: 0.85rem;
+  padding: 0.5rem 1rem; border-radius: var(--radius-full); cursor: pointer;
+}
+.tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.cmd-row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+.copy-line {
+  background: var(--panel-strong); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 0.55em 0.9em; font-size: 0.78rem;
+  overflow-x: auto; max-width: 100%;
+}
+.install-flow .toggle-btn { border-color: var(--border-strong); color: var(--text); background: var(--panel); }
+
+/* flags */
+.flags { display: grid; grid-template-columns: auto 1fr; gap: 0.35rem 1.2rem; margin: 0.8rem 0 0; font-size: 0.85rem; }
+.flags dt { color: var(--accent); }
+.flags dd { margin: 0; color: var(--muted); font-family: var(--font-display); }
+
+/* troubleshooting */
+details { border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.7rem 1rem; margin-bottom: 0.6rem; background: var(--panel); }
+summary { cursor: pointer; font-weight: 600; color: var(--text); }
+details p { margin: 0.6rem 0 0; }
+
+@media (max-width: 560px) {
+  .step { grid-template-columns: 1fr; }
+  .step-n { width: 36px; height: 36px; }
+}

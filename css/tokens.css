@@ -1,0 +1,72 @@
+/* Tokens do AtlasFile (subset do produto — frontend/src/styles.css).
+   Dark é o default; light via [data-theme="light"]. O ato espacial da landing
+   usa --space-* FIXOS (independem do tema — céu é céu). */
+
+:root {
+  color-scheme: dark;
+
+  --bg: #0e0d10;
+  --bg-elevated: #171519;
+  --panel: #171519;
+  --panel-strong: #1d1a20;
+  --text: #f5f4f8;
+  --text-strong: #fafafa;
+  --muted: #a8a4b3;
+  --tertiary: #7a7584;
+  --border: #2a2630;
+  --border-strong: #3a3640;
+
+  --accent: #ff5a36;
+  --accent-light: #ff8a6b;
+  --accent-soft: rgba(255, 90, 54, 0.14);
+  --accent-purple: #c97bff;
+  --danger: #ff6b7f;
+  --ok: #22c55e;
+
+  /* fixos do ato espacial (nunca mudam com o tema) */
+  --space-bg: #0e0d10;
+  --space-text: #f5f4f8;
+  --space-muted: #a8a4b3;
+
+  --font-display: "DM Sans", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Fragment Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.35);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 120ms;
+  --duration-normal: 200ms;
+  --duration-slow: 350ms;
+
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #f7f5f9;
+  --bg-elevated: #ffffff;
+  --panel: #ffffff;
+  --panel-strong: #f0edf3;
+  --text: #1f1a22;
+  --text-strong: #0f0d12;
+  --muted: #61596b;
+  --tertiary: #766e82;
+  --border: #ded6e4;
+  --border-strong: #c9c1cf;
+
+  --accent-soft: rgba(255, 90, 54, 0.12);
+  --accent-purple: #9b59b6;
+  --danger: #cf2942;
+  --ok: #16a34a;
+
+  --shadow-md: 0 4px 16px rgba(31, 26, 34, 0.12);
+  --shadow-lg: 0 18px 48px rgba(31, 26, 34, 0.14);
+}

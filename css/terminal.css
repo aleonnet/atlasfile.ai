@@ -1,0 +1,48 @@
+/* Terminal fake — janela com barra de 3 dots e corpo mono. */
+
+.term {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: #131117;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  max-width: 720px;
+  margin-top: 2rem;
+  text-align: left;
+}
+:root[data-theme="light"] .term { background: #1b1822; border-color: var(--border-strong); }
+
+.term-bar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.term-bar span { width: 11px; height: 11px; border-radius: 50%; background: #3a3640; }
+.term-bar span:nth-child(1) { background: #ff5f57; }
+.term-bar span:nth-child(2) { background: #febc2e; }
+.term-bar span:nth-child(3) { background: #28c840; }
+.term-bar em { margin-left: auto; font-style: normal; font-size: 0.68rem; color: #7a7584; }
+
+.term-body {
+  margin: 0; padding: 1rem 1.2rem 1.2rem;
+  font-size: clamp(0.62rem, 1.35vw, 0.78rem);
+  line-height: 1.65;
+  color: #d8d4e0;
+  overflow-x: auto;
+  min-height: 240px;
+}
+.t-prompt { color: #ff5a36; font-weight: 700; }
+.t-step { color: #f5f4f8; font-weight: 700; }
+.t-ok-line { color: #8fdcb0; }
+.t-box2 {
+  display: inline-block; color: #ff8a6b;
+  border: 1.5px solid #ff8a6b; border-radius: 10px;
+  padding: 0.55em 1.3em; margin: 0.5em 0 0.5em 1ch;
+}
+.t-caret {
+  display: inline-block; width: 8px; height: 1em; vertical-align: text-bottom;
+  background: #ff5a36; animation: caret-blink 1s steps(1) infinite;
+}
+@keyframes caret-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .t-caret { animation: none; } }

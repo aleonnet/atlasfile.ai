@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 — past the event horizon</title>
+  <!-- Autocontido de propósito: o GH Pages serve este arquivo em qualquer
+       profundidade de path, então nada de assets externos. -->
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center;
+      background: #0e0d10; color: #f5f4f8;
+      font-family: "DM Sans", -apple-system, sans-serif; text-align: center;
+    }
+    .hole {
+      width: 140px; height: 140px; border-radius: 50%; margin: 0 auto 1.6rem;
+      background:
+        radial-gradient(circle at 50% 50%, #000 38%, transparent 39%),
+        radial-gradient(circle at 50% 50%, rgba(255,242,223,0.9) 39%, transparent 41%),
+        conic-gradient(from 210deg, transparent 0deg, #ff5a36 60deg, #ffb366 120deg, #c97bff 200deg, transparent 320deg);
+      filter: blur(0.4px);
+      animation: spin 14s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .hole { animation: none; } }
+    h1 { font-size: 2rem; margin: 0 0 0.4rem; }
+    p { color: #a8a4b3; margin: 0 0 1.6rem; }
+    a { color: #ff8a6b; text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+    .stars { position: fixed; inset: 0; pointer-events: none; }
+    .stars::before, .stars::after {
+      content: ""; position: absolute; width: 2px; height: 2px; border-radius: 50%;
+      background: #ffe9c9;
+      box-shadow: 8vw 12vh 0 #cfd8ff, 22vw 78vh 0 #ffe9c9, 34vw 30vh 0 #cfd8ff,
+        48vw 88vh 0 #ffe9c9, 61vw 16vh 0 #cfd8ff, 74vw 64vh 0 #ffe9c9,
+        88vw 38vh 0 #cfd8ff, 15vw 55vh 0 #ffe9c9, 93vw 82vh 0 #ffe9c9;
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <main>
+    <div class="hole" aria-hidden="true"></div>
+    <h1>404</h1>
+    <p>This page fell past the event horizon.<br>Not even light — or this URL — comes back.</p>
+    <!-- ABSOLUTE-URL: update on custom domain -->
+    <a href="https://aleonnet.github.io/atlasfile.ai/">← AtlasFile</a>
+  </main>
+</body>
+</html>

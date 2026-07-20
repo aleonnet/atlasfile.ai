@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-page="landing">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AtlasFile — Gravity, organized. Local-first document intelligence</title>
+  <meta name="description" content="AtlasFile pulls your scattered documents into orbit: automatic ingestion, ML classification, hybrid search and a project-scoped AI assistant — 100% local, in Docker.">
+
+  <!-- anti-FOUC: tema resolvido antes do CSS (?theme= é hook de validação) -->
+  <script>(()=>{try{
+    const q=new URLSearchParams(location.search),f=q.get("theme");
+    if(f)localStorage.setItem("atlasfile.theme",f);
+    const s=localStorage.getItem("atlasfile.theme");
+    const t=s||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");
+    if(t==="light")document.documentElement.dataset.theme="light";
+  }catch(e){}})()</script>
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+  <!-- ABSOLUTE-URL: update on custom domain -->
+  <meta property="og:title" content="AtlasFile — Gravity, organized.">
+  <meta property="og:description" content="Local-first document intelligence: drop files, watch them fall into place. Hybrid search, ML classification, AI assistant — all in Docker on your machine.">
+  <meta property="og:type" content="website">
+  <!-- ABSOLUTE-URL: update on custom domain -->
+  <meta property="og:image" content="https://aleonnet.github.io/atlasfile.ai/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/terminal.css">
+</head>
+<body>
+  <a class="skip-link" href="#catalog" data-i18n="nav.skip">Skip to content</a>
+
+  <header class="site-header">
+    <a class="brand" href="index.html">AtlasFile<span class="dot">.</span></a>
+    <nav aria-label="Main">
+      <a href="#features" data-i18n="nav.features">Features</a>
+      <a href="install.html" data-i18n="nav.install">Install</a>
+      <a href="https://github.com/aleonnet/atlasfile" rel="noopener">GitHub</a>
+      <button class="toggle-btn" id="lang-toggle" aria-pressed="false" title="Português (Brasil)">PT</button>
+      <button class="toggle-btn" id="theme-toggle" data-i18n-attr="aria-label:nav.themeToggle" aria-label="Toggle theme">◐</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ATO 1+2 — palco sticky: buraco negro vivo + caos sendo puxado -->
+    <div class="act-gravity" id="act-gravity">
+      <div class="act-gravity__stage">
+        <canvas class="bh" id="bh" aria-hidden="true"></canvas>
+        <div class="no-gl-sky" aria-hidden="true"></div>
+
+        <div class="debris" id="debris" aria-hidden="true"></div>
+
+        <div class="hero-copy" id="hero-copy">
+          <p class="eyebrow" data-i18n="hero.eyebrow">Local-first document intelligence</p>
+          <h1 class="hero-title"><span data-i18n="hero.title1">Your documents</span><br><span class="grad" data-i18n="hero.title2">have gravity.</span></h1>
+          <p class="hero-lead" data-i18n="hero.lead">Drop files anywhere. AtlasFile pulls them into orbit — extracted, classified, indexed and searchable. All on your machine.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="install.html" data-i18n="hero.ctaInstall">Install in 60 seconds</a>
+            <a class="btn btn-ghost" href="https://github.com/aleonnet/atlasfile" rel="noopener" data-i18n="hero.ctaGithub">Star on GitHub</a>
+          </div>
+        </div>
+
+        <p class="chaos-caption" id="chaos-caption">
+          <span data-i18n="chaos.caption">Every messy folder ends the same way. Unless something pulls back.</span>
+        </p>
+
+        <a class="scroll-cue" href="#catalog" aria-label="Scroll to content"><span></span></a>
+      </div>
+    </div>
+
+    <!-- ATO 3 — do outro lado do horizonte: o catálogo -->
+    <section class="section act-catalog" id="catalog">
+      <div class="container">
+        <p class="eyebrow reveal" data-i18n="catalog.eyebrow">On the other side of the horizon</p>
+        <h2 class="reveal" data-i18n="catalog.title">From chaos to catalog.</h2>
+        <p class="lead reveal" data-i18n="catalog.lead">The same files — deduplicated by SHA-256, text-extracted (OCR included), classified by business domain and document type, renamed canonically and filed where they belong.</p>
+
+        <div class="tree reveal" role="img" data-i18n-attr="aria-label:catalog.treeAria" aria-label="Organized folder tree">
+          <pre class="tree-pre mono"><span class="t-dim">02_AREAS/</span>
+├── <span class="t-domain">legal</span>/<span class="t-type">contract</span>/
+│     └── <span class="t-file" data-file="contract_draft (3).pdf">2026-07-19__acme__share-purchase-agreement.pdf</span> <span class="t-ok">✓</span>
+├── <span class="t-domain">corporate</span>/<span class="t-type">minutes</span>/
+│     └── <span class="t-file" data-file="ata_2024_final_v2.docx">2026-07-19__acme__board-minutes.docx</span> <span class="t-ok">✓</span>
+├── <span class="t-domain">finance</span>/<span class="t-type">spreadsheet</span>/
+│     └── <span class="t-file" data-file="notas fiscais (7).xlsx">2026-07-19__acme__invoices-q2.xlsx</span> <span class="t-ok">✓</span>
+└── <span class="t-domain">operations</span>/<span class="t-type">diagram</span>/
+      └── <span class="t-file" data-file="IMG_4021.png">2026-07-19__acme__install-flowchart.png</span> <span class="t-ok">✓</span></pre>
+          <p class="tree-note mono" data-i18n="catalog.note">low confidence? → human triage queue → every decision trains the classifier</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ATO 4 — features -->
+    <section class="section act-features" id="features">
+      <div class="container">
+        <p class="eyebrow reveal" data-i18n="features.eyebrow">The physics engine</p>
+        <h2 class="reveal" data-i18n="features.title">Everything a document pipeline should be.</h2>
+
+        <div class="feature-grid">
+          <article class="feature reveal">
+            <div class="f-icon">⌕</div>
+            <h3 data-i18n="features.search.title">Hybrid search with citations</h3>
+            <p data-i18n="features.search.body">BM25 + vector kNN fused with RRF, optional cross-encoder rerank. Ask in one language, find documents in another — answers cite page, sheet and paragraph.</p>
+            <p class="f-meta mono">BM25 + kNN · RRF · OpenSearch</p>
+          </article>
+          <article class="feature reveal">
+            <div class="f-icon">✦</div>
+            <h3 data-i18n="features.assistant.title">Assistant that knows your project</h3>
+            <p data-i18n="features.assistant.body">Chat scoped to each project's corpus: clickable citations, inline charts (8 types), SQL over your spreadsheets, cost tracking. OpenAI or Anthropic — your key, your machine.</p>
+            <p class="f-meta mono">10 MCP tools · DuckDB · Telegram</p>
+          </article>
+          <article class="feature reveal">
+            <div class="f-icon">◉</div>
+            <h3 data-i18n="features.classifier.title">A classifier that learns from you</h3>
+            <p data-i18n="features.classifier.body">Three modes — rules, TF-IDF, LLM — benchmarked against each other on your own decisions. Every triage click becomes training data. The champion earns the job.</p>
+            <p class="f-meta mono">bootstrap → sparse_logreg → llm</p>
+          </article>
+          <article class="feature reveal">
+            <div class="f-icon">⏚</div>
+            <h3 data-i18n="features.local.title">Local-first, bilingual, yours</h3>
+            <p data-i18n="features.local.body">Five Docker services on your hardware. 25+ file formats with OCR. Full PT-BR / EN-US interface with live switching. No cloud, no telemetry, no lock-in.</p>
+            <p class="f-meta mono">Docker · FastAPI · React · PT/EN</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ATO 5 — install CTA -->
+    <section class="section act-cta" id="get-started">
+      <div class="container">
+        <p class="eyebrow reveal" data-i18n="cta.eyebrow">Cross the horizon</p>
+        <h2 class="reveal" data-i18n="cta.title">One command. Sixty seconds.</h2>
+        <p class="lead reveal" data-i18n="cta.lead">The installer clones, configures, builds and boots the whole stack — then opens the interface for you.</p>
+
+        <div class="term reveal" id="cta-term" role="img" data-i18n-attr="aria-label:cta.termAria" aria-label="Terminal running the AtlasFile installer"></div>
+
+        <div class="cta-actions reveal">
+          <a class="btn btn-primary" href="install.html" data-i18n="cta.btn">Full install guide →</a>
+          <code class="copy-line mono" id="copy-line">curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash</code>
+          <button class="toggle-btn" id="copy-btn" data-i18n="cta.copy">copy</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>AtlasFile · <span data-i18n="footer.tagline">Gravity, organized.</span></span>
+      <span>
+        <a href="https://github.com/aleonnet/atlasfile" rel="noopener">GitHub</a> ·
+        <a href="install.html" data-i18n="nav.install">Install</a> ·
+        <span class="mono" data-i18n="footer.credit">black hole physics after Bruneton, via ghostty-blackhole (MIT)</span>
+      </span>
+    </div>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

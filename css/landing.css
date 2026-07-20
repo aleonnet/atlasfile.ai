@@ -1,0 +1,145 @@
+/* Landing — atos do scrollytelling. O ato espacial (1-2) vive em fundo fixo
+   --space-bg independente do tema; do ato 3 em diante o tema governa. */
+
+/* ---- ATO 1+2: palco sticky ---- */
+.act-gravity { height: 320vh; position: relative; background: var(--space-bg); }
+.act-gravity__stage {
+  position: sticky; top: 0; height: 100vh; overflow: hidden;
+  display: grid; place-items: center;
+}
+.bh { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* fallback sem WebGL2: céu CSS digno */
+.no-gl-sky { position: absolute; inset: 0; display: none; }
+.no-gl .bh { display: none; }
+.no-gl .no-gl-sky {
+  display: block;
+  background:
+    radial-gradient(2px 2px at 12% 18%, rgba(255,235,200,0.9), transparent),
+    radial-gradient(1.5px 1.5px at 78% 12%, rgba(200,215,255,0.8), transparent),
+    radial-gradient(2px 2px at 32% 72%, rgba(255,235,200,0.7), transparent),
+    radial-gradient(1.5px 1.5px at 64% 58%, rgba(200,215,255,0.75), transparent),
+    radial-gradient(2px 2px at 88% 80%, rgba(255,235,200,0.8), transparent),
+    radial-gradient(1.5px 1.5px at 45% 35%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(circle at 62% 38%, rgba(255, 90, 54, 0.20), transparent 32%),
+    radial-gradient(circle at 62% 38%, rgba(0,0,0,0.9) 6%, transparent 12%),
+    var(--space-bg);
+}
+
+/* ---- hero copy ---- */
+.hero-copy {
+  position: relative; z-index: 3; text-align: center; max-width: 46rem;
+  padding: 0 1.2rem; margin-top: 16vh; /* abaixo do buraco em repouso */
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.7);
+}
+.hero-copy .eyebrow { color: var(--accent-light); }
+.hero-title { color: var(--space-text); }
+.hero-title .grad {
+  background: linear-gradient(92deg, var(--accent) 10%, var(--accent-light) 45%, var(--accent-purple) 90%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero-lead { color: var(--space-muted); font-size: 1.15rem; margin: 1rem auto 1.8rem; max-width: 38rem; }
+.hero-actions { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; }
+
+/* legenda do caos (aparece no meio do ato) */
+.chaos-caption {
+  position: absolute; z-index: 3; bottom: 14vh; left: 50%; transform: translateX(-50%);
+  color: var(--space-text); font-family: var(--font-mono); font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+  text-align: center; max-width: 34rem; padding: 0 1rem;
+  opacity: 0; text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
+}
+
+/* seta de scroll */
+.scroll-cue {
+  position: absolute; z-index: 3; bottom: 2.2rem; left: 50%; transform: translateX(-50%);
+  width: 26px; height: 42px; border: 2px solid rgba(255, 255, 255, 0.35); border-radius: 14px;
+}
+.scroll-cue span {
+  position: absolute; top: 7px; left: 50%; width: 4px; height: 8px; margin-left: -2px;
+  background: var(--accent); border-radius: 2px;
+  animation: cue-drop 1.6s var(--ease-out) infinite;
+}
+@keyframes cue-drop { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(14px); opacity: 0; } 100% { opacity: 0; } }
+
+/* ---- debris: arquivos caóticos ---- */
+.debris { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.chip {
+  position: absolute; left: 0; top: 0; will-change: transform, opacity;
+  font-family: var(--font-mono); font-size: clamp(0.62rem, 1.15vw, 0.8rem);
+  color: var(--space-text);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-full);
+  padding: 0.32em 0.85em;
+  white-space: nowrap;
+  backdrop-filter: blur(2px);
+}
+.chip .ext { color: var(--accent-light); }
+
+/* ---- transição espacial → temável ---- */
+.act-catalog {
+  background: linear-gradient(to bottom, var(--space-bg), var(--bg) 26%);
+  padding-top: clamp(6rem, 14vh, 9rem);
+}
+
+/* ---- ATO 3: árvore ---- */
+.tree {
+  margin-top: 2rem; border: 1px solid var(--border); border-radius: var(--radius-xl);
+  background: var(--panel); box-shadow: var(--shadow-lg); overflow-x: auto;
+}
+.tree-pre { margin: 0; padding: 1.4rem 1.6rem; font-size: 0.86rem; line-height: 1.9; }
+.t-dim { color: var(--tertiary); }
+.t-domain { color: var(--accent); font-weight: 700; }
+.t-type { color: var(--accent-purple); }
+.t-file { color: var(--text); position: relative; }
+.t-ok { color: var(--ok); }
+/* o "antes" caótico de cada arquivo aparece num balão ao pousar */
+.t-file::before {
+  content: attr(data-file) " → ";
+  color: var(--tertiary); text-decoration: line-through;
+  opacity: 0; transition: opacity 0.9s var(--ease-out);
+}
+.tree.is-in .t-file::before { opacity: 1; }
+.tree-note { padding: 0 1.6rem 1.2rem; color: var(--tertiary); font-size: 0.74rem; margin: 0; }
+
+/* reveals com stagger na árvore/features */
+.reveal:nth-child(2) { transition-delay: 60ms; }
+.reveal:nth-child(3) { transition-delay: 120ms; }
+.reveal:nth-child(4) { transition-delay: 180ms; }
+
+/* ---- ATO 4: features ---- */
+.feature-grid {
+  display: grid; grid-template-columns: 1fr;
+  gap: 1.2rem; margin-top: 2.4rem;
+}
+@media (min-width: 720px) { .feature-grid { grid-template-columns: 1fr 1fr; } }
+.feature {
+  border: 1px solid var(--border); border-radius: var(--radius-xl);
+  background: var(--panel); padding: 1.6rem 1.5rem 1.3rem;
+  transition: transform var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+}
+.feature:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 12px 40px var(--accent-soft); }
+.f-icon {
+  width: 42px; height: 42px; display: grid; place-items: center;
+  font-size: 1.3rem; color: var(--accent);
+  background: var(--accent-soft); border-radius: var(--radius-md); margin-bottom: 0.9rem;
+}
+.feature p { color: var(--muted); font-size: 0.94rem; }
+.f-meta { color: var(--tertiary); font-size: 0.7rem; margin: 0.8rem 0 0; }
+
+/* ---- ATO 5: CTA ---- */
+.act-cta { background: linear-gradient(to bottom, var(--bg), color-mix(in srgb, var(--bg) 88%, var(--accent) 12%) 140%); }
+.cta-actions { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.6rem; }
+.copy-line {
+  background: var(--panel-strong); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 0.55em 0.9em; font-size: 0.8rem;
+  overflow-x: auto; max-width: 100%;
+}
+.act-cta .toggle-btn { border-color: var(--border-strong); color: var(--text); background: var(--panel); }
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue span { animation: none; }
+  .chaos-caption { opacity: 1; }
+  .feature { transition: none; }
+  .t-file::before { transition: none; opacity: 1; }
+}
