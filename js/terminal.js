@@ -71,9 +71,11 @@ export function initTerminal(el, { instant = false } = {}) {
     let i = 0;
     const typeCmd = () => {
       if (i < CMD.length) {
-        body += esc(CMD[i]);
+        // jitter de velocidade: às vezes digita 2 chars — imprimindo AMBOS
+        const step = Math.random() < 0.25 ? 2 : 1;
+        body += esc(CMD.slice(i, i + step));
         target.innerHTML = frame(body + `<span class="t-caret"></span>`);
-        i += 1 + (Math.random() < 0.25 ? 1 : 0); // jitter: às vezes 2 chars
+        i += step;
         setTimeout(typeCmd, 22 + Math.random() * 40);
       } else {
         body += "\n";
