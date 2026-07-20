@@ -50,17 +50,29 @@
   opacity: 0; text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
 }
 
-/* seta de scroll */
+/* convite de scroll: rótulo pulsante + mouse animado */
 .scroll-cue {
-  position: absolute; z-index: 3; bottom: 2.2rem; left: 50%; transform: translateX(-50%);
-  width: 26px; height: 42px; border: 2px solid rgba(255, 255, 255, 0.35); border-radius: 14px;
+  position: absolute; z-index: 3; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.55rem;
+  text-decoration: none;
 }
-.scroll-cue span {
+.scroll-cue:hover { text-decoration: none; }
+.cue-label {
+  font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--space-muted); white-space: nowrap;
+  animation: cue-glow 2.4s ease-in-out infinite;
+}
+.cue-mouse {
+  position: relative; width: 26px; height: 42px;
+  border: 2px solid rgba(255, 255, 255, 0.35); border-radius: 14px; display: block;
+}
+.cue-dot {
   position: absolute; top: 7px; left: 50%; width: 4px; height: 8px; margin-left: -2px;
   background: var(--accent); border-radius: 2px;
   animation: cue-drop 1.6s var(--ease-out) infinite;
 }
 @keyframes cue-drop { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(14px); opacity: 0; } 100% { opacity: 0; } }
+@keyframes cue-glow { 0%, 100% { opacity: 0.12; } 50% { opacity: 0.95; } }
 
 /* ---- debris: arquivos caóticos ---- */
 .debris { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
@@ -135,7 +147,8 @@
 .cta-actions { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.6rem; }
 
 @media (prefers-reduced-motion: reduce) {
-  .scroll-cue span { animation: none; }
+  .cue-dot { animation: none; }
+  .cue-label { animation: none; opacity: 0.7; }
   .chaos-caption { opacity: 1; }
   .feature { transition: none; }
   .t-file::before { transition: none; opacity: 1; }

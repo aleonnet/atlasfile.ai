@@ -19,6 +19,8 @@ const STRINGS = {
     "hero.lead": "Drop files anywhere. AtlasFile pulls them into orbit — extracted, classified, indexed and searchable. All on your machine.",
     "hero.ctaInstall": "Install in 60 seconds",
     "hero.ctaGithub": "Star on GitHub",
+    "hero.scrollLabel": "roll the mouse",
+    "hero.scrollCue": "Scroll to content",
     "chaos.caption": "Every messy folder ends the same way. Unless something pulls back.",
 
     "catalog.eyebrow": "On the other side of the horizon",
@@ -93,6 +95,8 @@ const STRINGS = {
     "hero.lead": "Solte arquivos em qualquer lugar. O AtlasFile os puxa para a órbita — extraídos, classificados, indexados e pesquisáveis. Tudo na sua máquina.",
     "hero.ctaInstall": "Instale em 60 segundos",
     "hero.ctaGithub": "Estrela no GitHub",
+    "hero.scrollLabel": "role o mouse",
+    "hero.scrollCue": "Rolar para o conteúdo",
     "chaos.caption": "Toda pasta bagunçada termina do mesmo jeito. A menos que algo puxe de volta.",
 
     "catalog.eyebrow": "Do outro lado do horizonte",
