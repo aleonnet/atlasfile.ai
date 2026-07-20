@@ -76,6 +76,7 @@
   backdrop-filter: blur(2px);
 }
 .chip .ext { color: var(--accent-light); }
+@media (max-width: 559px) { .chip-extra { display: none; } }
 
 /* ---- transição espacial → temável ---- */
 .act-catalog {

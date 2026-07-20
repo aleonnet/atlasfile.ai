@@ -26,12 +26,13 @@ export function initDebris(stageEl) {
   const wrap = stageEl.querySelector(".debris");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Mobile: metade dos chips — 14 pills sobre 390px viram ruído sobre o texto
-  const files = stageEl.clientWidth < 560 ? FILES.filter((_, i) => i % 2 === 0) : FILES;
+  // Mobile: metade dos chips via CSS (.chip-extra some <560px) — responsivo
+  // nos dois sentidos, ao contrário de decidir no load
+  const files = FILES;
 
   chips = files.map((name, i) => {
     const el = document.createElement("span");
-    el.className = "chip";
+    el.className = i % 2 === 1 ? "chip chip-extra" : "chip";
     const e = ext(name);
     el.innerHTML = `${name.slice(0, name.length - e.length)}<span class="ext">${e}</span>`;
     wrap.appendChild(el);
@@ -61,20 +62,28 @@ export function layout(t, p) {
   const w = stage.clientWidth;
   const h = stage.clientHeight;
   const minSide = Math.min(w, h);
+  const narrow = w < 560;
   const c = bhCenter(t);
   const cx = c.x * w;
   const cy = c.y * h;
+  // Estreito: anel de repouso orbita o buraco (topo), longe da copy; e mais
+  // discreto — os chips são textura, o texto é o protagonista.
+  const ringCY = narrow ? h * 0.27 : h * 0.58;
+  const ringScaleX = narrow ? 0.95 : 1.35;
+  const ringScaleY = narrow ? 0.48 : 0.8;
+  const ringR = narrow ? 0.8 : 1;
+  const dim = narrow ? 0.7 : 1;
 
   for (const chip of chips) {
     const k0 = Math.max(0, Math.min(1, (p - chip.delay) / Math.max(0.001, 1 - chip.delay)));
     const k = k0 * k0 * (3 - 2 * k0); // smoothstep
 
-    // repouso: anel + flutuação lenta (centro do anel abaixo do buraco)
+    // repouso: anel + flutuação lenta
     const wob = Math.sin(t * chip.drift * 3 + chip.angle0) * 0.02;
-    const restR = (chip.radius0 + wob) * minSide;
+    const restR = (chip.radius0 + wob) * minSide * ringR;
     const restA = chip.angle0 + t * 0.02;
-    const rx = w / 2 + Math.cos(restA) * restR * 1.35;
-    const ry = h * 0.58 + Math.sin(restA) * restR * 0.8;
+    const rx = w / 2 + Math.cos(restA) * restR * ringScaleX;
+    const ry = ringCY + Math.sin(restA) * restR * ringScaleY;
 
     // espiral: raio decai até 0 no centro do buraco, ângulo acumula voltas
     const spR = restR * (1 - k);
@@ -85,7 +94,7 @@ export function layout(t, p) {
     const x = rx + (sx - rx) * k;
     const y = ry + (sy - ry) * k;
     const scale = 1 - 0.75 * k;
-    const fade = k < 0.82 ? 1 : Math.max(0, 1 - (k - 0.82) / 0.14);
+    const fade = (k < 0.82 ? 1 : Math.max(0, 1 - (k - 0.82) / 0.14)) * dim;
 
     chip.el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%,-50%) rotate(${(spA - restA) * 30}deg) scale(${scale.toFixed(3)})`;
     chip.el.style.opacity = fade.toFixed(3);
