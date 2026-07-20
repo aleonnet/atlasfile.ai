@@ -29,13 +29,7 @@
 }
 .tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-.cmd-row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
-.copy-line {
-  background: var(--panel-strong); border: 1px solid var(--border);
-  border-radius: var(--radius-md); padding: 0.55em 0.9em; font-size: 0.78rem;
-  overflow-x: auto; max-width: 100%;
-}
-.install-flow .toggle-btn { border-color: var(--border-strong); color: var(--text); background: var(--panel); }
+.tab-panel .cmd-box { display: block; }
 
 /* flags */
 .flags { display: grid; grid-template-columns: auto 1fr; gap: 0.35rem 1.2rem; margin: 0.8rem 0 0; font-size: 0.85rem; }

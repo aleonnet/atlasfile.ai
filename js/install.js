@@ -5,6 +5,7 @@ import { initI18n, t } from "./i18n.js";
 import { initTheme } from "./theme.js";
 import { initBlackhole } from "./blackhole.js";
 import { initTerminal } from "./terminal.js";
+import { initCopyButtons } from "./clipboard.js";
 
 initI18n();
 initTheme(document.getElementById("theme-toggle"));
@@ -35,19 +36,5 @@ tabs.forEach((tab) => {
   });
 });
 
-// copy buttons
-document.querySelectorAll(".copy-cmd").forEach((btn) => {
-  btn.addEventListener("click", async () => {
-    const code = btn.parentElement.querySelector("[data-cmd]");
-    try {
-      await navigator.clipboard.writeText(code.dataset.cmd);
-      btn.textContent = t("cta.copied");
-      setTimeout(() => (btn.textContent = t("cta.copy")), 1800);
-    } catch {
-      const range = document.createRange();
-      range.selectNodeContents(code);
-      getSelection().removeAllRanges();
-      getSelection().addRange(range);
-    }
-  });
-});
+// copiar embutido nas caixas de comando
+initCopyButtons(t);

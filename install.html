@@ -76,15 +76,19 @@
               <button class="tab" role="tab" id="tab-win" aria-selected="false" aria-controls="panel-win" tabindex="-1" data-i18n="install.tab.win">Windows (PowerShell)</button>
             </div>
             <div class="tab-panel" role="tabpanel" id="panel-mac" aria-labelledby="tab-mac">
-              <div class="cmd-row">
-                <code class="copy-line mono" data-cmd="curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash">curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash</code>
-                <button class="toggle-btn copy-cmd" data-i18n="cta.copy">copy</button>
+              <div class="cmd-box">
+                <code class="mono" data-cmd="curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash">curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash</code>
+                <button class="copy-icon" data-i18n-attr="aria-label:cta.copy;title:cta.copy" aria-label="copy" title="copy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                </button>
               </div>
             </div>
             <div class="tab-panel" role="tabpanel" id="panel-win" aria-labelledby="tab-win" hidden>
-              <div class="cmd-row">
-                <code class="copy-line mono" data-cmd="irm https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.ps1 | iex">irm https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.ps1 | iex</code>
-                <button class="toggle-btn copy-cmd" data-i18n="cta.copy">copy</button>
+              <div class="cmd-box">
+                <code class="mono" data-cmd="irm https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.ps1 | iex">irm https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.ps1 | iex</code>
+                <button class="copy-icon" data-i18n-attr="aria-label:cta.copy;title:cta.copy" aria-label="copy" title="copy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                </button>
               </div>
             </div>
           </div>

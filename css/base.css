@@ -99,6 +99,24 @@ body.past-space .toggle-btn { border-color: var(--border-strong); background: va
 .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
 .reveal.is-in { opacity: 1; transform: none; }
 
+/* ---- caixa de comando com copiar embutido ---- */
+.cmd-box { position: relative; display: inline-block; max-width: 100%; }
+.cmd-box code {
+  display: block; background: var(--panel-strong); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 0.6em 3em 0.6em 0.9em;
+  font-size: 0.8rem; overflow-x: auto; white-space: nowrap;
+}
+.copy-icon {
+  position: absolute; top: 50%; right: 0.4rem; transform: translateY(-50%);
+  width: 30px; height: 30px; display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-sm); background: transparent;
+  color: var(--tertiary); cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
+}
+.copy-icon:hover { color: var(--accent); background: var(--accent-soft); }
+.copy-icon.copied { color: var(--ok); }
+.copy-icon svg { width: 16px; height: 16px; }
+
 /* ---- footer ---- */
 .site-footer {
   border-top: 1px solid var(--border);

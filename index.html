@@ -106,25 +106,25 @@
 
         <div class="feature-grid">
           <article class="feature reveal">
-            <div class="f-icon">⌕</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
             <h3 data-i18n="features.search.title">Hybrid search with citations</h3>
             <p data-i18n="features.search.body">BM25 + vector kNN fused with RRF, optional cross-encoder rerank. Ask in one language, find documents in another — answers cite page, sheet and paragraph.</p>
             <p class="f-meta mono">BM25 + kNN · RRF · OpenSearch</p>
           </article>
           <article class="feature reveal">
-            <div class="f-icon">✦</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.2 6.2L20 12l-5.8 2.8L12 21l-2.2-6.2L4 12l5.8-2.8z"/></svg></div>
             <h3 data-i18n="features.assistant.title">Assistant that knows your project</h3>
             <p data-i18n="features.assistant.body">Chat scoped to each project's corpus: clickable citations, inline charts (8 types), SQL over your spreadsheets, cost tracking. OpenAI or Anthropic — your key, your machine.</p>
             <p class="f-meta mono">10 MCP tools · DuckDB · Telegram</p>
           </article>
           <article class="feature reveal">
-            <div class="f-icon">◉</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none"/></svg></div>
             <h3 data-i18n="features.classifier.title">A classifier that learns from you</h3>
             <p data-i18n="features.classifier.body">Three modes — rules, TF-IDF, LLM — benchmarked against each other on your own decisions. Every triage click becomes training data. The champion earns the job.</p>
             <p class="f-meta mono">bootstrap → sparse_logreg → llm</p>
           </article>
           <article class="feature reveal">
-            <div class="f-icon">⏚</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 9.5V20h14V9.5"/><path d="M9.5 20v-6h5v6"/></svg></div>
             <h3 data-i18n="features.local.title">Local-first, bilingual, yours</h3>
             <p data-i18n="features.local.body">Five Docker services on your hardware. 25+ file formats with OCR. Full PT-BR / EN-US interface with live switching. No cloud, no telemetry, no lock-in.</p>
             <p class="f-meta mono">Docker · FastAPI · React · PT/EN</p>
@@ -144,8 +144,12 @@
 
         <div class="cta-actions reveal">
           <a class="btn btn-primary" href="install.html" data-i18n="cta.btn">Full install guide →</a>
-          <code class="copy-line mono" id="copy-line">curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash</code>
-          <button class="toggle-btn" id="copy-btn" data-i18n="cta.copy">copy</button>
+          <div class="cmd-box">
+            <code class="mono" id="copy-line" data-cmd="curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash">curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash</code>
+            <button class="copy-icon" data-i18n-attr="aria-label:cta.copy;title:cta.copy" aria-label="copy" title="copy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+            </button>
+          </div>
         </div>
       </div>
     </section>

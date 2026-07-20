@@ -6,7 +6,8 @@ import { initTheme } from "./theme.js";
 import { initBlackhole } from "./blackhole.js";
 import { measure, tick, initReveals, initFpsDebug } from "./scroll.js";
 import { initDebris, layout } from "./debris.js";
-import { initTerminal, CMD } from "./terminal.js";
+import { initTerminal } from "./terminal.js";
+import { initCopyButtons } from "./clipboard.js";
 
 initI18n();
 initTheme(document.getElementById("theme-toggle"));
@@ -72,18 +73,6 @@ if (new URLSearchParams(location.search).get("og") === "1") {
   heroCopy.style.marginTop = "10vh";
 }
 
-// terminal do CTA + copy
+// terminal do CTA + copiar embutido
 initTerminal(document.getElementById("cta-term"));
-const copyBtn = document.getElementById("copy-btn");
-copyBtn?.addEventListener("click", async () => {
-  try {
-    await navigator.clipboard.writeText(CMD);
-    copyBtn.textContent = t("cta.copied");
-    setTimeout(() => (copyBtn.textContent = t("cta.copy")), 1800);
-  } catch {
-    const range = document.createRange();
-    range.selectNodeContents(document.getElementById("copy-line"));
-    getSelection().removeAllRanges();
-    getSelection().addRange(range);
-  }
-});
+initCopyButtons(t);
