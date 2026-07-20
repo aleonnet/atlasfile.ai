@@ -26,7 +26,10 @@ export function initDebris(stageEl) {
   const wrap = stageEl.querySelector(".debris");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  chips = FILES.map((name, i) => {
+  // Mobile: metade dos chips — 14 pills sobre 390px viram ruído sobre o texto
+  const files = stageEl.clientWidth < 560 ? FILES.filter((_, i) => i % 2 === 0) : FILES;
+
+  chips = files.map((name, i) => {
     const el = document.createElement("span");
     el.className = "chip";
     const e = ext(name);
@@ -39,7 +42,7 @@ export function initDebris(stageEl) {
       angle0: golden,
       radius0: 0.32 + 0.16 * ((i * 0.37) % 1),      // fração do menor lado
       drift: 0.05 + 0.1 * ((i * 0.53) % 1),          // flutuação parada
-      delay: 0.06 + 0.55 * (i / FILES.length),        // entrada escalonada na espiral
+      delay: 0.06 + 0.55 * (i / files.length),        // entrada escalonada na espiral
       spin: 2.2 + ((i * 0.29) % 1) * 1.6,             // voltas até o horizonte
     };
   });

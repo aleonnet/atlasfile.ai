@@ -133,8 +133,10 @@ void main() {
     rh = 0.15 + 0.02 * I + 0.006 * sin(t * 0.9);
     center = vec2(0.5) + 0.015 * vec2(sin(t * 0.31), cos(t * 0.23));
   } else {
-    // backdrop: deriva lenta pela metade superior, tamanho segue I
-    rh = mix(0.055, 0.085, I);
+    // backdrop: deriva lenta pela metade superior, tamanho segue I.
+    // Em retrato (mobile) o raio escala para baixo — rh é fração da ALTURA e
+    // numa tela 390x844 o disco varreria a largura inteira.
+    rh = mix(0.055, 0.085, I) * mix(0.68, 1.0, smoothstep(0.68, 1.05, aspect));
     vec2 wander = lissa(t * 0.12);
     center = vec2(0.5 + wander.x * 0.30, 0.62 + wander.y * 0.16);
   }

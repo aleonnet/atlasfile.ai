@@ -46,6 +46,8 @@ export function initTerminal(el, { instant = false } = {}) {
 
   if (instant || reduced) {
     render();
+    // trocar idioma re-renderiza o estado final no idioma novo
+    document.addEventListener("atlasfile:langchange", render);
     return { rerender: render };
   }
 
@@ -58,8 +60,9 @@ export function initTerminal(el, { instant = false } = {}) {
   }, { threshold: 0.4 });
   io.observe(el);
 
-  // placeholder até tocar
+  // placeholder até tocar; após tocar, troca de idioma re-renderiza o final
   el.innerHTML = frame(`<span class="t-prompt">$</span> <span class="t-caret"></span>`);
+  document.addEventListener("atlasfile:langchange", () => { if (played) render(); });
   return { rerender: () => { if (played) render(); } };
 
   function play(target) {

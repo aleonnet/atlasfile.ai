@@ -186,6 +186,9 @@ export function applyLang(next) {
     langBtn.setAttribute("aria-pressed", String(lang === "pt"));
     langBtn.title = lang === "pt" ? "English (US)" : "Português (Brasil)";
   }
+
+  // conteúdo renderizado por JS (ex.: terminal) escuta e se re-renderiza
+  document.dispatchEvent(new CustomEvent("atlasfile:langchange"));
 }
 
 export function initI18n() {
