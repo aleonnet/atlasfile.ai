@@ -19,13 +19,16 @@ function compile(gl, type, src) {
 }
 
 /* Centro do buraco em coordenadas de TELA (0..1, y-down do DOM) — espelha a
-   fórmula do shader (variant backdrop): lissa(t*0.12) → (0.5+wx*0.30, 0.62+wy*0.16)
-   em uv y-up; o DOM inverte o y. Usado pela espiral dos arquivos. */
-export function bhCenter(t) {
+   fórmula do shader (variant backdrop), incluindo a correção de retrato:
+   centro sobe (yUp 0.62→0.74) e a deriva vertical encolhe (0.16→0.06) no
+   mesmo smoothstep(0.68, 1.05, aspect) do raio. O DOM inverte o y. */
+export function bhCenter(t, aspect = 1.6) {
   const lx = 0.75 * Math.sin(t * 0.12 * 0.37) + 0.25 * Math.sin(t * 0.12 * 0.83 + 1.0);
   const ly = 0.70 * Math.sin(t * 0.12 * 0.54 + 2.1) + 0.30 * Math.sin(t * 0.12 * 1.07);
+  const k = Math.min(1, Math.max(0, (aspect - 0.68) / (1.05 - 0.68)));
+  const astep = k * k * (3 - 2 * k);
   const x = 0.5 + lx * 0.30;
-  const yUp = 0.62 + ly * 0.16;
+  const yUp = 0.74 + (0.62 - 0.74) * astep + ly * (0.06 + (0.16 - 0.06) * astep);
   return { x, y: 1 - yUp };
 }
 

@@ -136,9 +136,13 @@ void main() {
     // backdrop: deriva lenta pela metade superior, tamanho segue I.
     // Em retrato (mobile) o raio escala para baixo — rh é fração da ALTURA e
     // numa tela 390x844 o disco varreria a largura inteira.
-    rh = mix(0.055, 0.085, I) * mix(0.68, 1.0, smoothstep(0.68, 1.05, aspect));
+    float astep = smoothstep(0.68, 1.05, aspect);
+    rh = mix(0.055, 0.085, I) * mix(0.68, 1.0, astep);
     vec2 wander = lissa(t * 0.12);
-    center = vec2(0.5 + wander.x * 0.30, 0.62 + wander.y * 0.16);
+    // Em retrato o centro sobe e a deriva vertical encolhe — o disco vive
+    // acima da copy do hero em vez de atravessar o eyebrow.
+    center = vec2(0.5 + wander.x * 0.30,
+                  mix(0.74, 0.62, astep) + wander.y * mix(0.06, 0.16, astep));
   }
 
   // Look ativo: backdrop faz o tour com crossfade; orb fica no Inferno.

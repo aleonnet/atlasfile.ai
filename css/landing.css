@@ -33,6 +33,8 @@
   padding: 0 1.2rem; margin-top: 16vh; /* abaixo do buraco em repouso */
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.7);
 }
+/* Retrato: o buraco sobe (shader) e a copy desce — eyebrow livre do disco */
+@media (max-width: 559px) { .hero-copy { margin-top: 24vh; } }
 .hero-copy .eyebrow { color: var(--accent-light); }
 .hero-title { color: var(--space-text); }
 .hero-title .grad {

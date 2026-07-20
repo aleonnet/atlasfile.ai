@@ -63,15 +63,16 @@ export function layout(t, p) {
   const h = stage.clientHeight;
   const minSide = Math.min(w, h);
   const narrow = w < 560;
-  const c = bhCenter(t);
+  const c = bhCenter(t, w / h);
   const cx = c.x * w;
   const cy = c.y * h;
-  // Estreito: anel de repouso orbita o buraco (topo), longe da copy; e mais
-  // discreto — os chips são textura, o texto é o protagonista.
-  const ringCY = narrow ? h * 0.27 : h * 0.58;
+  // Estreito: anel de repouso abraça o topo, acima do buraco (que em retrato
+  // também sobe — ver bhCenter) e bem longe do eyebrow; os chips são textura,
+  // o texto é o protagonista.
+  const ringCY = narrow ? h * 0.18 : h * 0.58;
   const ringScaleX = narrow ? 0.95 : 1.35;
-  const ringScaleY = narrow ? 0.48 : 0.8;
-  const ringR = narrow ? 0.8 : 1;
+  const ringScaleY = narrow ? 0.4 : 0.8;
+  const ringR = narrow ? 0.7 : 1;
   const dim = narrow ? 0.7 : 1;
 
   for (const chip of chips) {
