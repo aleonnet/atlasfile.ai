@@ -12,7 +12,7 @@ const CMD = "curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/mai
 function scriptLines(lang) {
   const pt = lang === "pt";
   return [
-    { cls: "t-step", text: pt ? "[1/5] Verificando pré-requisitos" : "[1/5] Checking prerequisites" },
+    { cls: "t-step", text: pt ? "[1/5] Verificando e preparando pré-requisitos" : "[1/5] Checking and preparing prerequisites" },
     { cls: "t-ok-line", text: pt ? "  ✓ docker · git · portas livres" : "  ✓ docker · git · ports free" },
     { cls: "t-step", text: pt ? "[2/5] Clonando aleonnet/atlasfile" : "[2/5] Cloning aleonnet/atlasfile" },
     { cls: "t-step", text: pt ? "[3/5] Configurando" : "[3/5] Configuring" },
