@@ -4,7 +4,7 @@
 
 import { currentLang } from "./i18n.js";
 
-const CMD = "curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash";
+const CMD = "curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash -s -- --enable-auth --with-ollama";
 
 // A caixinha final é UM bloco com borda CSS: Fragment Mono não tem glifos
 // box-drawing (╭│) — cairiam em fonte fallback com largura diferente e as
