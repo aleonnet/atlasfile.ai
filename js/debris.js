@@ -13,6 +13,21 @@ const FILES = [
 ];
 
 const TAU = Math.PI * 2;
+
+/* Estreito (<560px): constelação estática — 5 chips (uma extensão de cada) em
+   posições nomeadas (frações de w,h) ao redor e abaixo do buraco. O anel
+   girante não cabe: 5+ chips × ~140px excedem o perímetro do anel em 390px, e
+   ancorar no cy importa a deriva Lissajous por cima do eyebrow (medido). Em
+   alturas ≤667px o chip mais baixo pode roçar a zona do eyebrow — o próprio
+   disco já invade essa região nessas telas; o texto fica por cima (z-index). */
+const POS_NARROW = {
+  0: [0.78, 0.33],   // contract_draft (3).pdf   — abaixo, à direita
+  2: [0.35, 0.35],   // notas fiscais (7).xlsx   — abaixo, à esquerda
+  4: [0.36, 0.145],  // scan0093.tiff            — acima
+  8: [0.77, 0.19],   // deck_v9_FINAL.pptx       — alto, à direita
+  12: [0.22, 0.28],  // foto_whatsapp_2024.jpeg  — lado esquerdo
+};
+
 let chips = [];
 let stage = null;
 
@@ -26,13 +41,13 @@ export function initDebris(stageEl) {
   const wrap = stageEl.querySelector(".debris");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Mobile: metade dos chips via CSS (.chip-extra some <560px) — responsivo
-  // nos dois sentidos, ao contrário de decidir no load
+  // Mobile: só os 5 chips de POS_NARROW via CSS (.chip-extra some <560px) —
+  // responsivo nos dois sentidos, ao contrário de decidir no load
   const files = FILES;
 
   chips = files.map((name, i) => {
     const el = document.createElement("span");
-    el.className = i % 2 === 1 ? "chip chip-extra" : "chip";
+    el.className = i in POS_NARROW ? "chip" : "chip chip-extra";
     const e = ext(name);
     el.innerHTML = `${name.slice(0, name.length - e.length)}<span class="ext">${e}</span>`;
     wrap.appendChild(el);
@@ -66,25 +81,27 @@ export function layout(t, p) {
   const c = bhCenter(t, w / h);
   const cx = c.x * w;
   const cy = c.y * h;
-  // Estreito: anel de repouso abraça o topo, acima do buraco (que em retrato
-  // também sobe — ver bhCenter) e bem longe do eyebrow; os chips são textura,
-  // o texto é o protagonista.
-  const ringCY = narrow ? h * 0.18 : h * 0.58;
-  const ringScaleX = narrow ? 0.95 : 1.35;
-  const ringScaleY = narrow ? 0.4 : 0.8;
-  const ringR = narrow ? 0.7 : 1;
+  const ringCY = h * 0.58;
+  const ringScaleX = 1.35;
+  const ringScaleY = 0.8;
   const dim = narrow ? 0.7 : 1;
 
-  for (const chip of chips) {
+  for (let i = 0; i < chips.length; i++) {
+    const chip = chips[i];
     const k0 = Math.max(0, Math.min(1, (p - chip.delay) / Math.max(0.001, 1 - chip.delay)));
     const k = k0 * k0 * (3 - 2 * k0); // smoothstep
 
-    // repouso: anel + flutuação lenta
+    // repouso: anel + flutuação lenta (largo) OU constelação fixa + flutter (estreito)
     const wob = Math.sin(t * chip.drift * 3 + chip.angle0) * 0.02;
-    const restR = (chip.radius0 + wob) * minSide * ringR;
+    const restR = (chip.radius0 + wob) * minSide;
     const restA = chip.angle0 + t * 0.02;
-    const rx = w / 2 + Math.cos(restA) * restR * ringScaleX;
-    const ry = ringCY + Math.sin(restA) * restR * ringScaleY;
+    const pos = narrow ? POS_NARROW[i] : null;
+    const rx = pos
+      ? pos[0] * w + Math.sin(t * chip.drift * 3 + chip.angle0) * 5
+      : w / 2 + Math.cos(restA) * restR * ringScaleX;
+    const ry = pos
+      ? pos[1] * h + Math.cos(t * chip.drift * 2 + chip.angle0) * 4
+      : ringCY + Math.sin(restA) * restR * ringScaleY;
 
     // espiral: raio decai até 0 no centro do buraco, ângulo acumula voltas
     const spR = restR * (1 - k);
