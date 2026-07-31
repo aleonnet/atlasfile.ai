@@ -125,6 +125,7 @@
               <dt>--keep-data · -KeepData</dt><dd data-i18n="install.step5.keepdata">uninstall: keep the search index (a future reinstall reuses it)</dd>
               <dt>--purge-data · -PurgeData</dt><dd data-i18n="install.step5.purgedata">uninstall: also erase the search index — your documents are untouched either way</dd>
               <dt>--remove-deps · -RemoveDeps</dt><dd data-i18n="install.step5.removedeps">also revert the dependencies the installer itself installed</dd>
+              <dt>DASHBOARDS_ENABLED + COMPOSE_PROFILES</dt><dd data-i18n="install.flags.dashboards">observability dashboard (optional, after installing): set DASHBOARDS_ENABLED=true and COMPOSE_PROFILES=dashboards in the .env, then docker compose up -d — opens at :5601 (DASHBOARDS_PORT remaps)</dd>
             </dl>
             <p data-i18n="install.flags.revert">Every reverting flag shows its plan and asks before touching anything — and your documents are never deleted. Uninstall is one command too:</p>
             <div class="tabs" role="tablist" data-i18n-attr="aria-label:install.tab.aria" aria-label="Platform">
