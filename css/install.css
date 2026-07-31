@@ -6,33 +6,45 @@
   background: radial-gradient(ellipse at 50% -10%, var(--accent-soft), transparent 60%), var(--bg);
 }
 .install-hero .lead { margin: 0 auto; }
-.orb-sig { width: 120px; height: 120px; margin: 0 auto 0.6rem; display: block; }
+/* o buraco negro E o cabecalho: canvas absoluto cobre o hero inteiro (o
+   starfield do shader preenche o canvas todo; o raio da sombra escala com a
+   altura). O conteudo fica por cima, na metade de baixo. */
+/* O shader centra o buraco no CANVAS (variant orb, sem knob de posicao).
+   Canvas 140% da altura deslocado -40%: o buraco cai no terco superior do
+   hero, o starfield segue cobrindo o hero inteiro e o texto vive embaixo. */
+.hero-bh { position: absolute; left: 0; width: 100%; top: -40%; height: 140%; display: block; }
+.install-hero {
+  position: relative; overflow: hidden;
+  min-height: 60vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding-bottom: 2rem;
+}
+.install-hero > :not(.hero-bh) { position: relative; z-index: 1; }
 
 .install-flow { max-width: 780px; display: flex; flex-direction: column; gap: 2.6rem; }
 
-.step { display: grid; grid-template-columns: 48px 1fr; gap: 1.2rem; align-items: start; }
+.step { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 1.2rem; align-items: start; }
+/* divisor entre os 3 passos e a referencia: linha continua em degrade */
+.flow-divider { display: flex; align-items: center; margin: 0.4rem 0; }
+.flow-divider::before, .flow-divider::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--border-strong)); }
+.flow-divider::after { background: linear-gradient(90deg, var(--border-strong), transparent); }
 .step-n {
   width: 42px; height: 42px; display: grid; place-items: center;
   border-radius: var(--radius-full); font-weight: 700; font-size: 1rem;
   color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent);
 }
+/* blocos de REFERENCIA (+ flags, ? troubleshooting): mesma gramatica, chip
+   discreto — o accent cheio fica so nos passos numerados ate usar */
+.step-n--ref { background: var(--panel); border-color: var(--border-strong); color: var(--muted); }
 .step h2 { font-size: 1.3rem; margin-bottom: 0.4rem; }
 .step p { color: var(--muted); }
 .step .term { margin-top: 1rem; }
 
-/* tabs */
-.tabs { display: flex; gap: 0.4rem; margin: 1rem 0 0.8rem; }
-.tab {
-  appearance: none; border: 1px solid var(--border); background: var(--panel);
-  color: var(--muted); font-family: var(--font-display); font-weight: 600; font-size: 0.85rem;
-  padding: 0.5rem 1rem; border-radius: var(--radius-full); cursor: pointer;
-}
-.tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-.tab-panel .cmd-box { display: block; }
+/* tabs migraram para base.css: o componente passou a ser compartilhado com a
+   CTA da home (e o step 5), e a home não carrega este arquivo. */
 
 /* flags */
-.flags { display: grid; grid-template-columns: auto 1fr; gap: 0.35rem 1.2rem; margin: 0.8rem 0 0; font-size: 0.85rem; }
+.flags { display: grid; grid-template-columns: fit-content(60%) minmax(0, 1fr); gap: 0.35rem 1.2rem; margin: 0.8rem 0 0; font-size: 0.85rem; }
 .flags dt { color: var(--accent); }
 .flags dd { margin: 0; color: var(--muted); font-family: var(--font-display); }
 
@@ -42,6 +54,6 @@ summary { cursor: pointer; font-weight: 600; color: var(--text); }
 details p { margin: 0.6rem 0 0; }
 
 @media (max-width: 560px) {
-  .step { grid-template-columns: 1fr; }
+  .step { grid-template-columns: minmax(0, 1fr); }
   .step-n { width: 36px; height: 36px; }
 }

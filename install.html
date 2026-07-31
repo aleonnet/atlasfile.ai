@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Install AtlasFile — one command, sixty seconds</title>
-  <meta name="description" content="Install AtlasFile with a single command: the script clones, configures, builds five Docker services and opens the interface. macOS, Linux and Windows (WSL2).">
+  <title>Install AtlasFile — one command, your machine</title>
+  <meta name="description" content="Install AtlasFile with a single command: it downloads the release bundle, pulls the published image, starts two Docker services and opens the interface. macOS, Linux and Windows (WSL2).">
 
   <script>(()=>{try{
     const q=new URLSearchParams(location.search),f=q.get("theme");
@@ -17,7 +17,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
-  <meta property="og:title" content="Install AtlasFile — one command, sixty seconds">
+  <meta property="og:title" content="Install AtlasFile — one command, your machine">
   <meta property="og:description" content="curl -fsSL … | bash — and your local document intelligence stack is live.">
   <meta property="og:type" content="website">
   <!-- ABSOLUTE-URL: update on custom domain -->
@@ -48,10 +48,10 @@
 
   <main>
     <section class="install-hero">
-      <canvas class="orb-sig" id="orb-sig" aria-hidden="true" width="120" height="120"></canvas>
+      <canvas class="hero-bh" id="orb-sig" aria-hidden="true" width="180" height="180"></canvas>
       <p class="eyebrow" data-i18n="install.eyebrow">Installation</p>
       <h1 data-i18n="install.title">Cross the event horizon.</h1>
-      <p class="lead" data-i18n="install.lead">One command clones the repo, configures the environment, builds five Docker services and opens the interface. Idempotent: run it again anytime to update.</p>
+      <p class="lead" data-i18n="install.lead">One command installs the latest release: the bundle is downloaded and SHA256-verified, the published image is pulled — no compiler, no git — and the interface opens. Idempotent: run it again anytime to update.</p>
     </section>
 
     <section class="section" id="steps">
@@ -63,13 +63,13 @@
             <h2 data-i18n="install.step1.title">Run the installer</h2>
             <p class="platform-text" data-i18n-html="install.step1.body.mac">No prerequisites to prepare: the script detects what is missing (Docker, git) and offers to install it for you. It asks where your project files should live (default: <code>~/Documents/AtlasFileProjects</code>) and takes it from there.</p>
 
-            <div class="tabs" role="tablist" aria-label="Platform">
+            <div class="tabs" role="tablist" data-i18n-attr="aria-label:install.tab.aria" aria-label="Platform">
               <button class="tab" role="tab" id="tab-mac" aria-selected="true" aria-controls="panel-mac" data-i18n="install.tab.mac">macOS / Linux</button>
               <button class="tab" role="tab" id="tab-win" aria-selected="false" aria-controls="panel-win" tabindex="-1" data-i18n="install.tab.win">Windows (PowerShell)</button>
             </div>
             <div class="tab-panel" role="tabpanel" id="panel-mac" aria-labelledby="tab-mac">
               <div class="cmd-box">
-                <code class="mono" data-cmd="curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash -s -- --enable-auth --with-ollama">curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash -s -- --enable-auth --with-ollama</code>
+                <code class="mono" data-cmd="curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash -s -- --enable-auth">curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash -s -- --enable-auth</code>
                 <button class="copy-icon" data-i18n-attr="aria-label:cta.copy;title:cta.copy" aria-label="copy" title="copy">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
                 </button>
@@ -77,7 +77,7 @@
             </div>
             <div class="tab-panel" role="tabpanel" id="panel-win" aria-labelledby="tab-win" hidden>
               <div class="cmd-box">
-                <code class="mono" data-cmd="& ([scriptblock]::Create((irm https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.ps1))) -EnableAuth -WithOllama">& ([scriptblock]::Create((irm https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.ps1))) -EnableAuth -WithOllama</code>
+                <code class="mono" data-cmd="& ([scriptblock]::Create((irm https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.ps1))) -EnableAuth">& ([scriptblock]::Create((irm https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.ps1))) -EnableAuth</code>
                 <button class="copy-icon" data-i18n-attr="aria-label:cta.copy;title:cta.copy" aria-label="copy" title="copy">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
                 </button>
@@ -90,7 +90,7 @@
           <div class="step-n mono">2</div>
           <div>
             <h2 data-i18n="install.step2.title">Watch it boot</h2>
-            <p data-i18n="install.step2.body">Tests run, images build, services come up, the API reports healthy — and the installer prints your addresses:</p>
+            <p data-i18n="install.step2.body">The release bundle is verified, the published image is pulled, the two services come up, the API reports healthy — and the installer prints your addresses and API key:</p>
             <div class="term" id="install-term" role="img" data-i18n-attr="aria-label:cta.termAria" aria-label="Terminal running the AtlasFile installer"></div>
           </div>
         </article>
@@ -98,33 +98,67 @@
         <article class="step">
           <div class="step-n mono">3</div>
           <div>
+            <h2 data-i18n="install.step4.title">First steps</h2>
+            <p data-i18n="install.step4.body">The interface opens at localhost:8000 with an onboarding wizard — paste the API key the installer printed (Settings → Access), create your first project, optionally add an OpenAI/Anthropic/Moonshot key for the assistant (validated live). Want a 100% local model instead? Install Ollama afterwards, pull a model and point the assistant at it — the final panel shows the exact command. Then drop files anywhere on the screen.</p>
+          </div>
+        </article>
+
+        <div class="flow-divider" role="presentation" aria-hidden="true"></div>
+
+        <article class="step">
+          <div class="step-n step-n--ref mono">+</div>
+          <div>
             <h2 data-i18n="install.step3.title">Optional flags</h2>
             <dl class="flags mono">
-              <dt>--dir PATH</dt><dd data-i18n="install.flags.dir">install location (default ~/AtlasFile)</dd>
-              <dt>--projects-root PATH</dt><dd data-i18n="install.flags.projects">where your documents live</dd>
-              <dt>--enable-auth</dt><dd data-i18n="install.flags.auth">generate an API key and require it</dd>
-              <dt>--yes</dt><dd data-i18n="install.flags.yes">non-interactive (accept defaults)</dd>
-              <dt>--install-deps</dt><dd data-i18n="install.flags.installdeps">install missing prerequisites (Docker, git) without prompting</dd>
-              <dt>--with-ollama</dt><dd data-i18n="install.flags.ollama">also install Ollama + a local model for a 100% local assistant</dd>
+              <dt>--port N · -Port</dt><dd data-i18n="install.flags.port">host port for the interface/API (default 8000; saved to the .env as ATLASFILE_PORT)</dd>
+              <dt>--dir PATH · -Dir</dt><dd data-i18n="install.flags.dir">install location (default ~/AtlasFile)</dd>
+              <dt>--projects-root PATH · -ProjectsRoot</dt><dd data-i18n="install.flags.projects">where your documents live</dd>
+              <dt>--version X.Y.Z · -Version</dt><dd data-i18n="install.flags.version">pin a release instead of the latest one (not combined with --from-source: Windows refuses the pair, bash ignores the pin)</dd>
+              <dt>--from-source · -FromSource</dt><dd data-i18n="install.flags.fromsource">contributor path: clone the repository and build locally (--repo-url and --branch only apply here)</dd>
+              <dt>--enable-auth · -EnableAuth</dt><dd data-i18n="install.flags.auth">generate an API key and require it</dd>
+              <dt>--yes · -Yes</dt><dd data-i18n="install.flags.yes">non-interactive (accept defaults)</dd>
+              <dt>--install-deps · -InstallDeps</dt><dd data-i18n="install.flags.installdeps">install missing prerequisites without prompting (Docker and git; on Windows, WSL2 and Docker Desktop)</dd>
+              <dt>--no-open · -NoOpen</dt><dd data-i18n="install.flags.noopen">do not open the browser at the end</dd>
+              <dt>--dry-run · -DryRun</dt><dd data-i18n="install.step5.dryrun">show, don't do — what an install (or an uninstall) would change</dd>
+              <dt>--doctor · -Doctor</dt><dd data-i18n="install.step5.doctor">read-only report of this machine; on Windows it covers both sides, Windows and WSL</dd>
+              <dt>--uninstall · -Uninstall</dt><dd data-i18n="install.step5.uninstall">removal plan first, confirmation before executing; what already existed on the machine is preserved</dd>
+              <dt>--keep-data · -KeepData</dt><dd data-i18n="install.step5.keepdata">uninstall: keep the search index (a future reinstall reuses it)</dd>
+              <dt>--purge-data · -PurgeData</dt><dd data-i18n="install.step5.purgedata">uninstall: also erase the search index — your documents are untouched either way</dd>
+              <dt>--remove-deps · -RemoveDeps</dt><dd data-i18n="install.step5.removedeps">also revert the dependencies the installer itself installed</dd>
             </dl>
+            <p data-i18n="install.flags.revert">Every reverting flag shows its plan and asks before touching anything — and your documents are never deleted. Uninstall is one command too:</p>
+            <div class="tabs" role="tablist" data-i18n-attr="aria-label:install.tab.aria" aria-label="Platform">
+              <button class="tab" role="tab" id="tab-un-mac" aria-selected="true" aria-controls="panel-un-mac" data-i18n="install.tab.mac">macOS / Linux</button>
+              <button class="tab" role="tab" id="tab-un-win" aria-selected="false" aria-controls="panel-un-win" tabindex="-1" data-i18n="install.tab.win">Windows (PowerShell)</button>
+            </div>
+            <div class="tab-panel" role="tabpanel" id="panel-un-mac" aria-labelledby="tab-un-mac">
+              <div class="cmd-box">
+                <code class="mono" data-cmd="curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash -s -- --uninstall --dir ~/AtlasFile">curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash -s -- --uninstall --dir ~/AtlasFile</code>
+                <button class="copy-icon" data-i18n-attr="aria-label:cta.copy;title:cta.copy" aria-label="copy" title="copy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="tab-panel" role="tabpanel" id="panel-un-win" aria-labelledby="tab-un-win" hidden>
+              <div class="cmd-box">
+                <code class="mono" data-cmd="& ([scriptblock]::Create((irm https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.ps1))) -Uninstall">& ([scriptblock]::Create((irm https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.ps1))) -Uninstall</code>
+                <button class="copy-icon" data-i18n-attr="aria-label:cta.copy;title:cta.copy" aria-label="copy" title="copy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                </button>
+              </div>
+            </div>
+
           </div>
         </article>
 
-        <article class="step">
-          <div class="step-n mono">4</div>
-          <div>
-            <h2 data-i18n="install.step4.title">First steps</h2>
-            <p data-i18n="install.step4.body">The interface opens at localhost:5173 with an onboarding wizard: create your first project, optionally add an OpenAI/Anthropic/Moonshot key for the assistant (validated live) — or pick a local Ollama model, no key needed — then drop files anywhere on the screen.</p>
-          </div>
-        </article>
 
         <article class="step">
-          <div class="step-n mono">?</div>
+          <div class="step-n step-n--ref mono">?</div>
           <div>
             <h2 data-i18n="install.trouble.title">Troubleshooting</h2>
             <details><summary data-i18n="install.trouble.docker.q">“Cannot connect to the Docker daemon”</summary><p data-i18n="install.trouble.docker.a">Docker Desktop isn't running. Start it and re-run the installer — it resumes where it left off.</p></details>
-            <details><summary data-i18n="install.trouble.ports.q">Port 5173 or 8000 already in use</summary><p data-i18n="install.trouble.ports.a">Another stack is bound to those ports. Stop it, or install to a second instance with --dir and a different name.</p></details>
-            <details><summary data-i18n="install.trouble.update.q">How do I update?</summary><p data-i18n="install.trouble.update.a">Re-run the same one-liner. It pulls the latest main, rebuilds and restarts — your projects and data are preserved.</p></details>
+            <details><summary data-i18n="install.trouble.ports.q">Port 8000 or 9200 already in use</summary><p data-i18n="install.trouble.ports.a">The installer detects the conflict before touching anything. Free the port, or install on another one: re-run with --port N (the .env keys are ATLASFILE_PORT and OPENSEARCH_PORT). Container names are fixed, so a second stack on the same machine needs the first one stopped.</p></details>
+            <details><summary data-i18n="install.trouble.update.q">How do I update?</summary><p data-i18n="install.trouble.update.a">Re-run the same one-liner. It updates the install to the latest release and restarts — your projects and data are preserved. Installs made by clone stay on the clone path.</p></details>
             <details><summary data-i18n="install.trouble.deleted.q">I deleted my projects folder</summary><p data-i18n="install.trouble.deleted.a">The app detects it and offers one-click recovery: it restarts itself, Docker recreates the folder and the orphaned index is cleaned — no manual commands.</p></details>
           </div>
         </article>

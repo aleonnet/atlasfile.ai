@@ -4,23 +4,33 @@
 
 import { currentLang } from "./i18n.js";
 
-const CMD = "curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash -s -- --enable-auth --with-ollama";
+const CMD = "curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash -s -- --enable-auth";
 
 // A caixinha final é UM bloco com borda CSS: Fragment Mono não tem glifos
 // box-drawing (╭│) — cairiam em fonte fallback com largura diferente e as
 // bordas desalinhariam.
+/* Roteiro fiel ao install.sh vigente (caminho release, pós-Fase-4a): títulos
+   [1/4]..[4/4] literais, bundle SHA-verificado, pull da imagem publicada,
+   painel de 4 linhas (com MCP) e a linha da API key. Tempos REAIS medidos no
+   E2E de 2026-07-31 na VM lima (install completo em 1m11s; pull 16s, subida
+   19s, health 4s) — nunca um número inventado. Cortes declarados: as linhas
+   de pré-requisito são condensadas numa só e o bloco "Next steps" fica fora.
+   O idioma do instalador real é EN; a versão PT é tradução ilustrativa. */
 function scriptLines(lang) {
   const pt = lang === "pt";
   return [
-    { cls: "t-step", text: pt ? "[1/5] Verificando e preparando pré-requisitos" : "[1/5] Checking and preparing prerequisites" },
-    { cls: "t-ok-line", text: pt ? "  ✓ docker · git · portas livres" : "  ✓ docker · git · ports free" },
-    { cls: "t-step", text: pt ? "[2/5] Clonando aleonnet/atlasfile" : "[2/5] Cloning aleonnet/atlasfile" },
-    { cls: "t-step", text: pt ? "[3/5] Configurando" : "[3/5] Configuring" },
-    { cls: "t-ok-line", text: pt ? "  ✓ .env criado — projetos em ~/Documents/AtlasFileProjects" : "  ✓ .env created — projects in ~/Documents/AtlasFileProjects" },
-    { cls: "t-step", text: pt ? "[4/5] Construindo e subindo a stack" : "[4/5] Building and starting the stack" },
-    { cls: "t-ok-line", text: pt ? "  ✓ 5 serviços no ar · API saudável" : "  ✓ 5 services up · API healthy" },
-    { cls: "t-step", text: pt ? "[5/5] Instalação concluída em 58s 🎉" : "[5/5] Installed in 58s 🎉" },
-    { cls: "t-box2", text: "Interface   http://localhost:5173\nAPI         http://localhost:8000/health\n" + (pt ? "Projetos    " : "Projects    ") + "~/Documents/AtlasFileProjects" },
+    { cls: "t-step", text: pt ? "[1/4] Verificando e preparando pré-requisitos" : "[1/4] Checking and preparing prerequisites" },
+    { cls: "t-ok-line", text: pt ? "  ✓ curl · tar · docker (daemon de pé) · docker compose" : "  ✓ curl · tar · docker (daemon running) · docker compose" },
+    { cls: "t-step", text: pt ? "[2/4] Obtendo o AtlasFile" : "[2/4] Getting AtlasFile" },
+    { cls: "t-ok-line", text: pt ? "  ✓ bundle da release v1.0.0 baixado e verificado (checksum ok)" : "  ✓ release bundle v1.0.0 downloaded and verified (checksum ok)" },
+    { cls: "t-step", text: pt ? "[3/4] Configurando" : "[3/4] Configuring" },
+    { cls: "t-ok-line", text: pt ? "  ✓ .env criado (senha do OpenSearch gerada para esta instalação)" : "  ✓ .env created (OpenSearch password generated for this install)" },
+    { cls: "t-step", text: pt ? "[4/4] Baixando as imagens e subindo a stack" : "[4/4] Getting the images and starting the stack" },
+    { cls: "t-ok-line", text: pt ? "  ✓ pull da imagem publicada no ghcr.io (16s)" : "  ✓ pulling the app image (published on ghcr.io) (16s)" },
+    { cls: "t-ok-line", text: pt ? "  ✓ 2 serviços no ar (19s) · API saudável (4s)" : "  ✓ starting the 2 services (19s) · API healthy (4s)" },
+    { cls: "t-step", text: pt ? "Instalação concluída em 1m11s 🎉" : "Install finished in 1m11s 🎉" },
+    { cls: "t-box2", text: "Interface   http://localhost:8000\nAPI         http://localhost:8000/health\nMCP         http://localhost:8000/mcp\n" + (pt ? "Projetos    " : "Projects    ") + "~/Documents/AtlasFileProjects" },
+    { cls: "t-ok-line", text: pt ? "  🔑 API key (cole em Configuração → Acesso): atlas_sk_••••••••" : "  🔑 API key (paste it in Settings → Access): atlas_sk_••••••••" },
   ];
 }
 
@@ -92,7 +102,7 @@ export function initTerminal(el, { instant = false } = {}) {
       const l = lines[n];
       body += `<span class="${l.cls}">${esc(l.text)}</span>\n`;
       target.innerHTML = frame(body + `<span class="t-caret"></span>`);
-      const isBox = l.cls === "t-box";
+      const isBox = l.cls === "t-box2";  // era "t-box", classe inexistente: o timing rápido nunca era aplicado
       setTimeout(() => runLines(n + 1), isBox ? 70 : 260 + Math.random() * 320);
     };
     typeCmd();

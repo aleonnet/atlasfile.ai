@@ -99,6 +99,20 @@ body.past-space .toggle-btn { border-color: var(--border-strong); background: va
 .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
 .reveal.is-in { opacity: 1; transform: none; }
 
+/* ---- tabs de plataforma (home CTA, install steps 1 e 5) ---- */
+/* wrapper das abas quando ele e um flex item (CTA da home): sem min-width: 0
+   o nowrap do comando impoe a largura intrinseca e a PAGINA ganha scroll
+   horizontal — medido em 390px (overflow de 531px). */
+.cmd-tabs { min-width: 0; max-width: 100%; }
+.tabs { display: flex; gap: 0.4rem; margin: 1rem 0 0.8rem; }
+.tab {
+  appearance: none; border: 1px solid var(--border); background: var(--panel);
+  color: var(--muted); font-family: var(--font-display); font-weight: 600; font-size: 0.85rem;
+  padding: 0.5rem 1rem; border-radius: var(--radius-full); cursor: pointer;
+}
+.tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.tab-panel .cmd-box { display: block; }
+
 /* ---- caixa de comando com copiar embutido ---- */
 .cmd-box { position: relative; display: inline-block; max-width: 100%; }
 .cmd-box code {

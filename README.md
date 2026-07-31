@@ -30,9 +30,10 @@ de software mentem sobre compositing premultiplicado.
 
 ## Estrutura
 
-- `index.html` — landing (5 atos: hero → caos puxado → catálogo → features → install CTA)
-- `install.html` — install-as-story (terminal animado, tabs macOS/Linux × Windows, flags, troubleshooting)
-- `js/shader.js` — GLSL portado 1:1 do produto (não editar a física aqui; a fonte é o repo do AtlasFile)
+- `index.html` — landing (5 atos: hero → caos puxado → catálogo → features → install CTA com tabs macOS/Linux × Windows)
+- `install.html` — install-as-story (terminal animado, tabs macOS/Linux × Windows, flags em pares bash/PowerShell, flags de reversão no mesmo bloco + uninstall copiável, troubleshooting)
+- `js/tabs.js` — tabs ARIA compartilhadas (escopadas por tablist; usadas pela home e pelo install)
+- `js/shader.js` — GLSL portado 1:1 do produto (não editar a física aqui; a fonte é o repo do AtlasFile) + uniform `uZoom` de APRESENTAÇÃO (escala do raio no variant orb; física intacta)
 - `js/blackhole.js` — runner WebGL2 + `bhCenter()` (os chips espiralam para o centro real do buraco)
 - `js/i18n.js` — dicionário EN/PT completo (EN canônico no HTML)
 

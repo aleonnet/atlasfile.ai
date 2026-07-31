@@ -63,7 +63,7 @@
           <h1 class="hero-title"><span data-i18n="hero.title1">Your documents</span><br><span class="grad" data-i18n="hero.title2">have gravity.</span></h1>
           <p class="hero-lead" data-i18n="hero.lead">Drop files anywhere. AtlasFile pulls them into orbit — extracted, classified, indexed and searchable. All on your machine.</p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="install.html" data-i18n="hero.ctaInstall">Install in 60 seconds</a>
+            <a class="btn btn-primary" href="install.html" data-i18n="hero.ctaInstall">Install AtlasFile</a>
             <a class="btn btn-ghost" href="https://github.com/aleonnet/atlasfile" rel="noopener" data-i18n="hero.ctaGithub">Star on GitHub</a>
           </div>
         </div>
@@ -198,7 +198,7 @@
           <article class="feature reveal">
             <div class="f-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 9.5V20h14V9.5"/><path d="M9.5 20v-6h5v6"/></svg></div>
             <h3 data-i18n="features.local.title">Local-first, bilingual, yours</h3>
-            <p data-i18n="features.local.body">Five Docker services on your hardware. 25+ file formats with OCR. Full PT-BR / EN-US interface with live switching. No cloud, no telemetry, no lock-in.</p>
+            <p data-i18n="features.local.body">Two Docker services on your hardware, straight from a published image. 25+ file formats with OCR. Full PT-BR / EN-US interface with live switching. No cloud, no telemetry, no lock-in.</p>
             <p class="f-meta mono">Docker · FastAPI · React · PT/EN</p>
           </article>
         </div>
@@ -209,18 +209,34 @@
     <section class="section act-cta" id="get-started">
       <div class="container">
         <p class="eyebrow reveal" data-i18n="cta.eyebrow">Cross the horizon</p>
-        <h2 class="reveal" data-i18n="cta.title">One command. Sixty seconds.</h2>
-        <p class="lead reveal" data-i18n="cta.lead">The installer clones, configures, builds and boots the whole stack — then opens the interface for you.</p>
+        <h2 class="reveal" data-i18n="cta.title">One command. Your machine.</h2>
+        <p class="lead reveal" data-i18n="cta.lead">The installer downloads the release, verifies it, pulls the published image and boots the stack — then opens the interface for you.</p>
 
         <div class="term reveal" id="cta-term" role="img" data-i18n-attr="aria-label:cta.termAria" aria-label="Terminal running the AtlasFile installer"></div>
 
         <div class="cta-actions reveal">
           <a class="btn btn-primary" href="install.html" data-i18n="cta.btn">Full install guide →</a>
-          <div class="cmd-box">
-            <code class="mono" id="copy-line" data-cmd="curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash -s -- --enable-auth --with-ollama">curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash -s -- --enable-auth --with-ollama</code>
-            <button class="copy-icon" data-i18n-attr="aria-label:cta.copy;title:cta.copy" aria-label="copy" title="copy">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-            </button>
+          <div class="cmd-tabs">
+            <div class="tabs" role="tablist" data-i18n-attr="aria-label:install.tab.aria" aria-label="Platform">
+              <button class="tab" role="tab" id="tab-cta-mac" aria-selected="true" aria-controls="panel-cta-mac" data-i18n="install.tab.mac">macOS / Linux</button>
+              <button class="tab" role="tab" id="tab-cta-win" aria-selected="false" aria-controls="panel-cta-win" tabindex="-1" data-i18n="install.tab.win">Windows (PowerShell)</button>
+            </div>
+            <div class="tab-panel" role="tabpanel" id="panel-cta-mac" aria-labelledby="tab-cta-mac">
+              <div class="cmd-box">
+                <code class="mono" data-cmd="curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash -s -- --enable-auth">curl -fsSL https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.sh | bash -s -- --enable-auth</code>
+                <button class="copy-icon" data-i18n-attr="aria-label:cta.copy;title:cta.copy" aria-label="copy" title="copy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="tab-panel" role="tabpanel" id="panel-cta-win" aria-labelledby="tab-cta-win" hidden>
+              <div class="cmd-box">
+                <code class="mono" data-cmd="& ([scriptblock]::Create((irm https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.ps1))) -EnableAuth">& ([scriptblock]::Create((irm https://raw.githubusercontent.com/aleonnet/atlasfile/main/install.ps1))) -EnableAuth</code>
+                <button class="copy-icon" data-i18n-attr="aria-label:cta.copy;title:cta.copy" aria-label="copy" title="copy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

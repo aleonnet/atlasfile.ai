@@ -8,6 +8,7 @@ import { measure, tick, initReveals, initFpsDebug } from "./scroll.js";
 import { initDebris, layout } from "./debris.js";
 import { initTerminal } from "./terminal.js";
 import { initCopyButtons } from "./clipboard.js";
+import { initAllTabs } from "./tabs.js";
 
 initI18n();
 initTheme(document.getElementById("theme-toggle"));
@@ -73,8 +74,9 @@ if (new URLSearchParams(location.search).get("og") === "1") {
   heroCopy.style.marginTop = "10vh";
 }
 
-// terminal do CTA + copiar embutido
+// terminal do CTA + tabs de plataforma + copiar embutido
 initTerminal(document.getElementById("cta-term"));
+initAllTabs();
 initCopyButtons(t);
 
 // clips do "how it works": tocam só quando visíveis (e nunca em reduced-motion,
