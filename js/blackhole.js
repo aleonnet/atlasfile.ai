@@ -39,7 +39,10 @@ export function bhCenter(t, aspect = 1.6) {
  *  - onTime(t): callback por frame com o relógio do shader (para a espiral)
  * Retorna false se WebGL2 indisponível (caller aplica fallback .no-gl).
  */
-export function initBlackhole(canvas, { variant = "backdrop", getIntensity = () => 0.55, starGain = 0.6, onTime = null } = {}) {
+export function initBlackhole(canvas, { variant = "backdrop", getIntensity = () => 0.55, starGain = 0.6, onTime = null, calm = false, zoom = 1 } = {}) {
+  // calm: canvas GRANDE que nao e o backdrop (ex.: hero do install) — herda o
+  // pacing do backdrop (30fps de draw + DPR progressivo 1.0→1.25)
+  const calmo = variant === "backdrop" || calm;
   const gl = canvas.getContext("webgl2", { alpha: true, antialias: false, premultipliedAlpha: true });
   if (!gl) return false;
 
@@ -69,12 +72,19 @@ export function initBlackhole(canvas, { variant = "backdrop", getIntensity = () 
     intensity: gl.getUniformLocation(prog, "uIntensity"),
     variant: gl.getUniformLocation(prog, "uVariant"),
     starGain: gl.getUniformLocation(prog, "uStarGain"),
+    zoom: gl.getUniformLocation(prog, "uZoom"),
   };
 
   const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
     || new URLSearchParams(location.search).get("motion") === "reduce";
 
-  let dpr = Math.min(window.devicePixelRatio || 1, variant === "backdrop" ? 1.25 : 2);
+  // DPR alvo (o visual pleno) e DPR inicial. O backdrop NASCE em 1.0 e é
+  // PROMOVIDO ao alvo quando os frames provarem folga sustentada — máquina
+  // forte fica visualmente idêntica (promove em ~1s), fraca nunca paga o
+  // custo. O orb (120px) e o reduced-motion (1 frame só) começam no alvo:
+  // ali a economia é irrisória e o preço seria nitidez.
+  const dprAlvo = Math.min(window.devicePixelRatio || 1, calmo ? 1.25 : 2);
+  let dpr = calmo && !reduced ? Math.min(dprAlvo, 1) : dprAlvo;
   const applySize = () => {
     const w = canvas.clientWidth || 1;
     const h = canvas.clientHeight || 1;
@@ -94,6 +104,7 @@ export function initBlackhole(canvas, { variant = "backdrop", getIntensity = () 
     gl.uniform1f(loc.intensity, getIntensity());
     gl.uniform1f(loc.variant, variant === "orb" ? 1 : 0);
     gl.uniform1f(loc.starGain, starGain);
+    gl.uniform1f(loc.zoom, zoom);
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
@@ -107,19 +118,47 @@ export function initBlackhole(canvas, { variant = "backdrop", getIntensity = () 
   // Degrau adaptativo: 30 frames seguidos acima de 22ms → DPR 1.0
   let slowFrames = 0;
   let last = start;
+  // Promoção (o inverso do degrau): 60 rAFs seguidos abaixo de 17ms — o
+  // orçamento de um frame a 60Hz é 16.7ms — provam folga sustentada e o
+  // backdrop sobe para o DPR alvo. Uma vez só: se depois disso a máquina
+  // afundar, o degrau de descida assume e não há flip-flop.
+  let fastFrames = 0;
+  let promoted = dpr >= dprAlvo;
+  // O backdrop desenha a 30fps (um draw a cada ~2 rAFs): a deriva Lissajous
+  // anda a 0.12 rad/s e o twinkle a 0.5–2.5 Hz — conteúdo lento demais para
+  // 60fps mudarem o que se vê, e o custo de GPU cai pela metade. O rAF segue
+  // a 60 para o relógio da adaptação; só o draw é pulado. O orb fica a 60.
+  const drawGapMs = calmo ? 30 : 0;
+  let lastDraw = -1e9;
+  // Contadores de prova (lidos pela bancada de medição; custo zero real)
+  window.__bhStats = window.__bhStats || {};
+  const stats = (window.__bhStats[canvas.id || variant] = { rafs: 0, draws: 0 });
 
   const frame = (now) => {
     raf = requestAnimationFrame(frame);
     const dt = now - last;
     last = now;
+    stats.rafs++;
     if (dt > 22) {
+      fastFrames = 0;
       if (++slowFrames === 30 && dpr > 1) {
         dpr = 1;
         applySize();
       }
     } else if (slowFrames < 30) {
       slowFrames = 0;
+      if (!promoted && dt < 17 && ++fastFrames >= 60) {
+        promoted = true;
+        dpr = dprAlvo;
+        applySize();
+        // redimensionar LIMPA o canvas: sem desenhar já neste frame, o gap de
+        // 30fps deixaria 1-2 frames transparentes — um flash visível.
+        lastDraw = -1e9;
+      }
     }
+    if (drawGapMs && now - lastDraw < drawGapMs) return;
+    lastDraw = now;
+    stats.draws++;
     draw((now - start) / 1000);
   };
 

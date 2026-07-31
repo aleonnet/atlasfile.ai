@@ -24,6 +24,9 @@ uniform float uTime;
 uniform float uIntensity; // 0..1 — massa/tamanho/atividade do buraco
 uniform float uVariant;   // 0 = backdrop (deriva Lissajous), 1 = orb (centrado)
 uniform float uStarGain;  // brilho do starfield lenteado
+uniform float uZoom;      // APRESENTACAO (nao fisica): escala do raio no
+                          // variant orb — 1.0 = original; o hero do install
+                          // usa <1 para o buraco nao dominar o cabecalho
 
 // ------------------------------------------------------------- tunables ----
 const float DILATION_MIN = 0.2;
@@ -130,7 +133,7 @@ void main() {
   vec2 center;
   if (uVariant > 0.5) {
     // orb: centrado, tamanho estável, respiração sutil
-    rh = 0.15 + 0.02 * I + 0.006 * sin(t * 0.9);
+    rh = (0.15 + 0.02 * I + 0.006 * sin(t * 0.9)) * max(uZoom, 0.05);
     center = vec2(0.5) + 0.015 * vec2(sin(t * 0.31), cos(t * 0.23));
   } else {
     // backdrop: deriva lenta pela metade superior, tamanho segue I.
