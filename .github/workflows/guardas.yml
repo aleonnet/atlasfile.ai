@@ -1,0 +1,41 @@
+name: guardas
+
+# Push na main e' deploy (GitHub Pages). Sem CI, a guarda de hit-test dos CTAs
+# so' existiria no dia em que alguem lembrasse de roda-la a mao — e 6 dos ultimos
+# 10 commits deste repo sao de conteudo, exatamente o tipo de mudanca que
+# reintroduz o defeito sem ninguem perceber.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  hero-hit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: instalar bancada
+        working-directory: tests
+        run: npm install --no-audit --no-fund
+      - name: instalar chromium
+        working-directory: tests
+        run: npx playwright install --with-deps chromium
+      - name: guarda de hit-test dos CTAs do hero
+        run: node tests/hero-hit.mjs
+
+  urls-relativas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: politica permanente — so URLs relativas (exceto ABSOLUTE-URL)
+        run: |
+          if grep -rn 'href="/\|src="/' *.html; then
+            echo "::error::URL absoluta encontrada — o site e' servido de subpasta no GitHub Pages"
+            exit 1
+          fi
+          echo "ok"

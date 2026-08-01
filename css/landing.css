@@ -28,8 +28,14 @@
 }
 
 /* ---- hero copy ---- */
+/* z-index 4 (acima da legenda e do convite de scroll, ambos em 3): os CTAs
+   precisam vencer o hit-test. Empate em 3 era resolvido por ordem de DOM e a
+   legenda vem depois no markup — em telas baixas ela roubava o clique dos dois
+   botoes. O limiar depende de altura E idioma (EN ~887px, PT ~940px, porque a
+   copy em PT e' mais alta): 1080p maximizado a 100% com barra de tarefas ja
+   caia dentro em PT. Guarda: tests/hero-hit.mjs */
 .hero-copy {
-  position: relative; z-index: 3; text-align: center; max-width: 46rem;
+  position: relative; z-index: 4; text-align: center; max-width: 46rem;
   padding: 0 1.2rem; margin-top: 16vh; /* abaixo do buraco em repouso */
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.7);
 }
@@ -50,6 +56,10 @@
   color: var(--space-text); font-family: var(--font-mono); font-size: clamp(0.85rem, 1.6vw, 1.05rem);
   text-align: center; max-width: 34rem; padding: 0 1rem;
   opacity: 0; text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
+  /* decorativa: nunca intercepta ponteiro. opacity 0 NAO desliga hit-testing, e
+     sem shader (.no-gl) o onTime nem roda para escrever a opacidade inline —
+     a caixa ficava viva por cima dos CTAs. Mesmo tratamento de .debris. */
+  pointer-events: none;
 }
 
 /* convite de scroll: rótulo pulsante + mouse animado */
@@ -177,6 +187,11 @@
 @media (prefers-reduced-motion: reduce) {
   .cue-dot { animation: none; }
   .cue-label { animation: none; opacity: 0.7; }
+  /* NOTA (medido 2026-08-01): esta regra e' INERTE. Em reduced-motion o runner
+     ainda chama draw(11.7) (blackhole.js:189) -> onTime (:111) -> main.js:49
+     escreve style.opacity="0.000" INLINE, que vence o CSS. A legenda fica
+     invisivel aqui, como no fluxo normal. Mantida por nao ser escopo deste fix;
+     nao contar com ela para exibir a frase. */
   .chaos-caption { opacity: 1; }
   .feature { transition: none; }
   .t-file::before { transition: none; opacity: 1; }

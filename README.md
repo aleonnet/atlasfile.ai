@@ -20,13 +20,37 @@ Hooks de teste por querystring:
 |---|---|
 | `?theme=light\|dark` | força tema (grava e aplica) |
 | `?lang=pt\|en` | força idioma |
-| `?progress=0..1` | congela a coreografia do scroll (screenshots determinísticos) |
+| `?progress=0..1` | congela a coreografia do scroll (só `uIntensity` — **não** congela o relógio do shader) |
 | `?og=1` | composição limpa para gerar o card social |
 | `?motion=reduce` | simula prefers-reduced-motion |
 | `?debug=fps` | contador de FPS |
 
 Validação visual de shader: **sempre** `chrome --headless=new` (GPU real) — renderizadores
 de software mentem sobre compositing premultiplicado.
+
+**Screenshot determinístico exige `?motion=reduce`**, não `?progress=`. O `uTime` do shader é
+relógio de parede (`draw((now - start) / 1000)`, `blackhole.js:162`): o tour de looks e a deriva
+Lissajous andam sozinhos, e duas capturas do mesmo `?progress` nunca batem pixel a pixel. Em
+`?motion=reduce` o runner desenha **um** frame em `t = 11.7` (`blackhole.js:189`) — e o `?progress`
+ainda varia a intensidade, então a matriz `motion=reduce × progress × theme × lang` continua valendo.
+
+## Bancada
+
+```bash
+npm --prefix tests install        # uma vez (Playwright; tests/ é gitignored)
+node tests/hero-hit.mjs           # guarda de hit-test dos CTAs do hero
+node tests/hero-hit.mjs --sweep-cue   # mede o limiar em que o .scroll-cue rouba o clique
+```
+
+`tests/hero-hit.mjs` sobe um servidor estático próprio (reprova **antes** do deploy) e clica de
+verdade, com `document.elementFromPoint`, em 9 pontos de cada CTA, numa matriz de 12 viewports × 2
+idiomas × (normal, reduced-motion).
+
+**Por que ela existe:** elementos decorativos empatados em `z-index` com `.hero-copy` vencem por
+ordem de DOM e roubam o clique dos CTAs quando o viewport encolhe. `opacity: 0` **não** desliga
+hit-testing. O limiar depende de altura **e idioma** — em PT a copy do hero é mais alta e o limiar
+sobe de ~887 px para ~940 px, ou seja **PT reprova em viewports onde EN passa**. Qualquer mudança
+de `z-index`, de `margin-top` do hero ou de posição de elemento no palco tem de passar por ela.
 
 ## Estrutura
 

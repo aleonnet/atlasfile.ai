@@ -1,0 +1,13 @@
+# A RAIZ DESTE REPO É O SITE PUBLICADO (GitHub Pages, branch main, pasta /).
+# Tudo que for commitado aqui vai para produção — e o .nojekyll desliga
+# qualquer filtragem do Jekyll. Por isso este arquivo existe.
+
+node_modules/
+tests/node_modules/
+tests/results/
+.playwright-mcp/
+test-results/
+playwright-report/
+
+.DS_Store
+*.log

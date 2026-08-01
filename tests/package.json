@@ -1,0 +1,13 @@
+{
+  "name": "atlasfile-website-tests",
+  "private": true,
+  "type": "module",
+  "description": "Bancada de guardas do site. Escopada aqui para a raiz seguir zero-build: nada em tests/ e' servido pelo GitHub Pages.",
+  "scripts": {
+    "hero-hit": "node hero-hit.mjs",
+    "cue-sweep": "node hero-hit.mjs --sweep-cue"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}
