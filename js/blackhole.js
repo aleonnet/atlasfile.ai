@@ -84,7 +84,10 @@ export function initBlackhole(canvas, { variant = "backdrop", getIntensity = () 
   // custo. O orb (120px) e o reduced-motion (1 frame só) começam no alvo:
   // ali a economia é irrisória e o preço seria nitidez.
   const dprAlvo = Math.min(window.devicePixelRatio || 1, calmo ? 1.25 : 2);
-  let dpr = calmo && !reduced ? Math.min(dprAlvo, 1) : dprAlvo;
+  // dprBase = nitidez que a máquina merece (1.0, promovida a dprAlvo).
+  // dpr = dprBase × escala do nível de qualidade (ver NIVEIS abaixo).
+  let dprBase = calmo && !reduced ? Math.min(dprAlvo, 1) : dprAlvo;
+  let dpr = dprBase;
   const applySize = () => {
     const w = canvas.clientWidth || 1;
     const h = canvas.clientHeight || 1;
@@ -115,48 +118,98 @@ export function initBlackhole(canvas, { variant = "backdrop", getIntensity = () 
   let inView = true;
   let raf = 0;
   let running = false;
-  // Degrau adaptativo: 30 frames seguidos acima de 22ms → DPR 1.0
-  let slowFrames = 0;
   let last = start;
-  // Promoção (o inverso do degrau): 60 rAFs seguidos abaixo de 17ms — o
-  // orçamento de um frame a 60Hz é 16.7ms — provam folga sustentada e o
-  // backdrop sobe para o DPR alvo. Uma vez só: se depois disso a máquina
-  // afundar, o degrau de descida assume e não há flip-flop.
+  // Promoção de nitidez: 60 rAFs seguidos abaixo de 17ms — o orçamento de um
+  // frame a 60Hz é 16.7ms — provam folga sustentada e o backdrop sobe para o
+  // DPR alvo. Uma vez só; a escada de qualidade abaixo cuida do caminho oposto.
   let fastFrames = 0;
-  let promoted = dpr >= dprAlvo;
-  // O backdrop desenha a 30fps (um draw a cada ~2 rAFs): a deriva Lissajous
-  // anda a 0.12 rad/s e o twinkle a 0.5–2.5 Hz — conteúdo lento demais para
-  // 60fps mudarem o que se vê, e o custo de GPU cai pela metade. O rAF segue
-  // a 60 para o relógio da adaptação; só o draw é pulado. O orb fica a 60.
-  const drawGapMs = calmo ? 30 : 0;
+  let promoted = dprBase >= dprAlvo;
   let lastDraw = -1e9;
+
+  /* ---- qualidade adaptativa (dynamic resolution scaling) --------------------
+     Control law padrão (Babylon SceneOptimizer / DRS de console): degrada em
+     degraus ordenados SÓ até voltar ao alvo, e volta a subir quando houver
+     folga sustentada. Máquina que segura o alvo nunca sai do nível 0 e fica
+     idêntica ao que rodava antes.
+
+     Ordem dos degraus, medida em SwiftShader a 1280x720 (mesma corrida):
+       nível 0 — 30fps de draw, escala 1.00 ................  55 fps  (baseline)
+       nível 1 — 20fps de draw, escala 1.00 ................  81 fps  (+51.6%)
+       nível 2 — 20fps de draw, escala 0.75 ................ 107 fps  (+93.2%)
+     A cadência vem primeiro porque não custa UM pixel de nitidez (só taxa
+     temporal, e o conteúdo anda a 0.12 rad/s). A escala vem depois porque
+     amolece o anel de fótons. Pulamos 0.90/0.85 de propósito: medido, eles
+     pagam praticamente o mesmo custo visual (0.85% dos px contra 0.98%) por
+     metade do ganho.
+
+     Gatilho por JANELA, não por sequência: frames de draw (~24ms) e de skip
+     (~8ms) se alternam, então "N consecutivos acima de 22ms" nunca acontece —
+     medido 179 de 345 frames lentos com sequência máxima de 4. Era por isso
+     que o degrau antigo nunca disparava.
+
+     Assimetria deliberada (padrão de DRS): desce após UMA janela ruim, sobe
+     só após TRÊS janelas limpas. Cada transição chama applySize(), que realoca
+     o buffer e limpa o canvas — oscilar sai mais caro que ficar degradado. */
+  const NIVEIS = [
+    { gap: 30, escala: 1 },
+    { gap: 50, escala: 1 },
+    { gap: 50, escala: 0.75 },
+  ];
+  const JANELA = 60;      // rAFs por avaliação
+  const LENTOS_P_DESCER = 30; // metade da janela acima de 22ms
+  const LIMPAS_P_SUBIR = 3;
+
+  let nivel = 0;
+  let drawGap = calmo ? NIVEIS[0].gap : 0;
+  let amostras = 0, lentos = 0, limpas = 0;
+
+  const aplicaNivel = () => {
+    drawGap = calmo ? NIVEIS[nivel].gap : 0;
+    const alvo = dprBase * NIVEIS[nivel].escala;
+    if (alvo === dpr) return;
+    dpr = alvo;
+    applySize();
+    // applySize LIMPA o canvas; sem zerar o gap, o próximo draw pode ser
+    // segurado e deixar um frame transparente — um flash visível.
+    lastDraw = -1e9;
+  };
+
   // Contadores de prova (lidos pela bancada de medição; custo zero real)
   window.__bhStats = window.__bhStats || {};
-  const stats = (window.__bhStats[canvas.id || variant] = { rafs: 0, draws: 0 });
+  const stats = (window.__bhStats[canvas.id || variant] = { rafs: 0, draws: 0, nivel: 0 });
 
   const frame = (now) => {
     raf = requestAnimationFrame(frame);
     const dt = now - last;
     last = now;
     stats.rafs++;
-    if (dt > 22) {
-      fastFrames = 0;
-      if (++slowFrames === 30 && dpr > 1) {
-        dpr = 1;
-        applySize();
+
+    if (dt > 22) lentos++;
+    if (++amostras >= JANELA) {
+      if (lentos >= LENTOS_P_DESCER && nivel < NIVEIS.length - 1) {
+        nivel++;
+        promoted = true; // quem está degradando não volta a subir nitidez base
+        limpas = 0;
+        aplicaNivel();
+      } else if (lentos === 0 && nivel > 0) {
+        if (++limpas >= LIMPAS_P_SUBIR) { nivel--; limpas = 0; aplicaNivel(); }
+      } else if (lentos > 0) {
+        limpas = 0;
       }
-    } else if (slowFrames < 30) {
-      slowFrames = 0;
-      if (!promoted && dt < 17 && ++fastFrames >= 60) {
-        promoted = true;
-        dpr = dprAlvo;
-        applySize();
-        // redimensionar LIMPA o canvas: sem desenhar já neste frame, o gap de
-        // 30fps deixaria 1-2 frames transparentes — um flash visível.
-        lastDraw = -1e9;
-      }
+      stats.nivel = nivel;
+      amostras = 0;
+      lentos = 0;
     }
-    if (drawGapMs && now - lastDraw < drawGapMs) return;
+
+    if (nivel === 0 && !promoted && dt < 17 && ++fastFrames >= 60) {
+      promoted = true;
+      dprBase = dprAlvo;
+      aplicaNivel();
+    } else if (dt >= 17) {
+      fastFrames = 0;
+    }
+
+    if (drawGap && now - lastDraw < drawGap) return;
     lastDraw = now;
     stats.draws++;
     draw((now - start) / 1000);
