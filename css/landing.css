@@ -100,7 +100,17 @@
   backdrop-filter: blur(2px);
 }
 .chip .ext { color: var(--accent-light); }
-@media (max-width: 559px) { .chip-extra { display: none; } }
+/* Menos chips quando não cabem — mesma saída já usada para largura estreita.
+   A guarda de debris.js tira os 14 de cima do texto pelo raio (preservando o
+   ângulo), e em tela LARGA isso basta: medido a 1440x610, 14 chips e 1 só par
+   sobreposto, o mesmo da main. Onde a moldura é estreita o empurrão radial não
+   cabe, cai para o eixo e aí eles se empilham — 6 pares a 1024x700, 9 a
+   800x610. Por isso a condição é de largura + altura, não de altura sozinha:
+   telas largas e baixas mantêm os 14. */
+@media (max-width: 559px),
+       (max-width: 1100px) and (max-height: 900px) {
+  .chip-extra { display: none; }
+}
 
 /* ---- transição espacial → temável ---- */
 .act-catalog {

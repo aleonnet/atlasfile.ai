@@ -101,12 +101,48 @@ const PROBE = () => {
     capRect.left < actRect.right && capRect.right > actRect.left);
   const capOpacity = cap ? getComputedStyle(cap).opacity : "0";
 
+  /* Legibilidade: nenhum chip de debris pode se sobrepor ao texto do hero em
+     repouso. O anel escala com min(w,h) e é concêntrico com a copy, então em
+     tela larga e baixa ele encolhe para cima do texto — medido, 13 de 14 chips
+     a 1440x610. Na espiral (p>0) os chips DEVEM atravessar o centro, mas ali a
+     copy já sumiu; por isso a asserção é só no repouso. */
+  const alvosTexto = [...document.querySelectorAll(".hero-copy .eyebrow, .hero-title, .hero-lead, .hero-actions")]
+    .map((e) => e.getBoundingClientRect());
+  const inter = (a, b) =>
+    Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) *
+    Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
+  const palco = document.querySelector(".act-gravity__stage").getBoundingClientRect();
+  const visiveis = [...document.querySelectorAll(".chip")]
+    .filter((el) => getComputedStyle(el).display !== "none" && +getComputedStyle(el).opacity > 0.05)
+    .map((el) => el.getBoundingClientRect());
+
+  let chipsSobreTexto = 0, areaSobreTexto = 0, chipsCortados = 0;
+  for (const c of visiveis) {
+    let s = 0;
+    for (const t of alvosTexto) s += inter(c, t);
+    if (s > 0) { chipsSobreTexto++; areaSobreTexto += s; }
+    if (inter(c, palco) < c.width * c.height - 1) chipsCortados++;
+  }
+
+  /* Tirar chip de cima do texto não pode virar chip em cima de chip: uma versão
+     intermediária empurrava pelo eixo em vez do raio e subia de 1 para 9 pares
+     sobrepostos. A main tem 1-2; depois do ajuste o máximo medido na matriz é
+     2. O teto de 3 é essa medição com uma folga de um par. */
+  let paresChips = 0;
+  for (let i = 0; i < visiveis.length; i++)
+    for (let j = i + 1; j < visiveis.length; j++)
+      if (inter(visiveis[i], visiveis[j]) > 0) paresChips++;
+
   return {
     lang: document.documentElement.lang,
     folga: capRect && btns[0] ? +(capRect.top - btns[0].getBoundingClientRect().bottom).toFixed(1) : null,
     alvos,
     cruzaRetangulos: cruza,
     capOpacity,
+    chipsSobreTexto,
+    areaSobreTexto: Math.round(areaSobreTexto),
+    paresChips,
+    chipsCortados,
     cue: (() => {
       const c = document.querySelector(".scroll-cue");
       if (!c) return null;
@@ -167,6 +203,23 @@ try {
           `  ${String(w + "x" + h).padEnd(11)} ${lang.padEnd(5)} ` +
           `${String(r.folga).padStart(7)}   ${(a.mortos + "/9").padEnd(9)} ${(b.mortos + "/9").padEnd(9)} ` +
           `${ok ? "ok" : "MORTO  <- " + ladroes}`
+        );
+      }
+    }
+
+    console.log("\n  legibilidade — nenhum chip de debris pode cobrir o texto do hero (em repouso)");
+    console.log("  " + "-".repeat(68));
+    for (const [w, h] of VIEWPORTS) {
+      for (const lang of LANGS) {
+        casos++;
+        const r = await medir(browser, base, { w, h, lang });
+        const ok = r.chipsSobreTexto === 0 && r.paresChips <= 3;
+        if (!ok) falhas++;
+        console.log(
+          `  ${String(w + "x" + h).padEnd(11)} ${lang.padEnd(5)} ` +
+          `sobre o texto: ${String(r.chipsSobreTexto).padStart(2)} (${String(r.areaSobreTexto).padStart(5)} px2)   ` +
+          `pares chip-chip: ${String(r.paresChips).padStart(2)}   cortados: ${String(r.chipsCortados).padStart(2)}   ` +
+          `${ok ? "ok" : r.chipsSobreTexto ? "ILEGIVEL" : "AGLOMERADO"}`
         );
       }
     }

@@ -30,6 +30,7 @@ const POS_NARROW = {
 
 let chips = [];
 let stage = null;
+let heroCopy = null;
 
 function ext(name) {
   const i = name.lastIndexOf(".");
@@ -38,6 +39,7 @@ function ext(name) {
 
 export function initDebris(stageEl) {
   stage = stageEl;
+  heroCopy = stageEl.querySelector(".hero-copy");
   const wrap = stageEl.querySelector(".debris");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -86,6 +88,34 @@ export function layout(t, p) {
   const ringScaleY = 0.8;
   const dim = narrow ? 0.7 : 1;
 
+  /* Caixa proibida: o texto do hero, inflado pela METADE DO CHIP (empurrar só
+     o centro até a borda deixaria metade do chip ainda por cima) mais folga.
+     Existe porque o anel escala com min(w,h) e é concêntrico com a copy
+     (ringCY = 0.58h = o centro dela), enquanto o texto tem altura fixa em px:
+     em tela larga e baixa o anel encolhe para dentro do texto — medido, 13 de
+     14 chips a 1440x610 e 14 de 14 a 1440x560.
+     Lida no MESMO lote de leituras de clientWidth/Height, sem reflow extra, e
+     por frame em vez de cacheada: a caixa muda com resize E com troca de
+     idioma (a copy em PT é mais alta). Guarda: tests/hero-hit.mjs */
+  let proibida = null;
+  let dims = null;
+  if (!narrow && heroCopy && chips.length) {
+    const rc = heroCopy.getBoundingClientRect();
+    const rs = stage.getBoundingClientRect();
+    // Todas as leituras de layout num lote só, ANTES de qualquer escrita —
+    // ler offsetWidth dentro do loop de escrita causaria thrash. A inflação é
+    // POR CHIP porque as larguras variam muito ("foto_whatsapp_2024.jpeg"
+    // contra "IMG_4021.png"): usar a do primeiro sub-infla os largos e eles
+    // continuam por cima do texto.
+    dims = chips.map((c) => [c.el.offsetWidth, c.el.offsetHeight]);
+    proibida = {
+      cx: rc.left - rs.left + rc.width / 2,
+      cy: rc.top - rs.top + rc.height / 2,
+      w2: rc.width / 2,
+      h2: rc.height / 2,
+    };
+  }
+
   for (let i = 0; i < chips.length; i++) {
     const chip = chips[i];
     const k0 = Math.max(0, Math.min(1, (p - chip.delay) / Math.max(0.001, 1 - chip.delay)));
@@ -96,12 +126,49 @@ export function layout(t, p) {
     const restR = (chip.radius0 + wob) * minSide;
     const restA = chip.angle0 + t * 0.02;
     const pos = narrow ? POS_NARROW[i] : null;
-    const rx = pos
+    let rx = pos
       ? pos[0] * w + Math.sin(t * chip.drift * 3 + chip.angle0) * 5
       : w / 2 + Math.cos(restA) * restR * ringScaleX;
-    const ry = pos
+    let ry = pos
       ? pos[1] * h + Math.cos(t * chip.drift * 2 + chip.angle0) * 4
       : ringCY + Math.sin(restA) * restR * ringScaleY;
+
+    // Quem cair na caixa proibida sai por UM eixo — o de menor deslocamento
+    // que ainda deixe o chip inteiro dentro do palco. Empurrão radial parecia
+    // mais natural mas quebra em tela estreita: ali a caixa inflada fica mais
+    // larga que o próprio viewport (medido, hw 452px contra 400 de meia-tela a
+    // 800px), então a saída horizontal é sempre para fora da borda — subiu de
+    // 1 para 7 chips cortados. Na vertical sempre cabe, porque a caixa tem a
+    // altura do texto, não a largura.
+    // Só no REPOUSO: na espiral (k>0) os chips devem atravessar o centro, e
+    // ali a copy já sumiu (heroFade zera em p >= 0.28, main.js:45).
+    // Em tela alta nada cai dentro, então isto é no-op.
+    if (proibida) {
+      const mx = dims[i][0] / 2 + 4, my = dims[i][1] / 2 + 4;
+      const hw = proibida.w2 + mx + 10, hh = proibida.h2 + my + 10;
+      const dx = rx - proibida.cx, dy = ry - proibida.cy;
+      const n = Math.max(Math.abs(dx) / hw, Math.abs(dy) / hh);
+      if (n < 1 && n > 1e-4) {
+        // RADIAL: escala o raio até a borda da caixa, ao longo do próprio raio
+        // do chip. Preserva o ângulo — o centro do anel (ringCY = 0.58h) e o
+        // centro da copy coincidem — e por isso não aglomera.
+        const px = proibida.cx + dx / n, py = proibida.cy + dy / n;
+        if (px >= mx && px <= w - mx && py >= my && py <= h - my) {
+          rx = px; ry = py;
+        } else {
+          // Radial sairia do palco (acontece em tela estreita, onde a caixa
+          // inflada é mais larga que a meia-tela). Cai para o eixo que cabe.
+          // Axial não preserva ângulo e tende a aglomerar, por isso é o plano B.
+          const alvoX = proibida.cx + (dx < 0 ? -hw : hw);
+          const alvoY = proibida.cy + (dy < 0 ? -hh : hh);
+          const cabeX = alvoX >= mx && alvoX <= w - mx;
+          const cabeY = alvoY >= my && alvoY <= h - my;
+          if (cabeY && (!cabeX || Math.abs(alvoY - ry) <= Math.abs(alvoX - rx))) ry = alvoY;
+          else if (cabeX) rx = alvoX;
+          else ry = Math.min(Math.max(alvoY, my), h - my);
+        }
+      }
+    }
 
     // espiral: raio decai até 0 no centro do buraco, ângulo acumula voltas
     const spR = restR * (1 - k);

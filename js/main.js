@@ -62,6 +62,12 @@ if (!ok) {
 if (matchMedia("(prefers-reduced-motion: reduce)").matches || new URLSearchParams(location.search).get("motion") === "reduce") {
   layout(11.7, 0);
   heroCopy.style.opacity = "1";
+  // Segunda passada quando as webfonts assentarem: aqui o layout roda UMA vez,
+  // e o texto cresce depois do swap (index.html:31, display=swap) — os chips
+  // ficariam posicionados por métricas de fonte velhas e cairiam sobre a copy.
+  // Medido em PT a 1440x610: 8 de 14 chips sobre o texto sem esta linha.
+  // (resize já se auto-corrige: applySize → draw(11.7) → onTime → layout.)
+  document.fonts?.ready.then(() => layout(11.7, 0));
 }
 
 // modo OG (?og=1): esconde chrome da página para o screenshot 1200x630
